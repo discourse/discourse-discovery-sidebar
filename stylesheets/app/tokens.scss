@@ -1,0 +1,17 @@
+// Component tokens, all derived from core variables so colour schemes work
+// for free. A theme restyles every panel by redefining these on :root.
+:root {
+  --discovery-sidebar-width: 18rem;
+  --discovery-sidebar-gap: var(--space-6);
+  --discovery-sidebar-panel-gap: var(--space-4);
+  --discovery-sidebar-panel-bg: var(--secondary);
+  --discovery-sidebar-panel-border: 1px solid var(--primary-low);
+  --discovery-sidebar-panel-radius: var(--d-border-radius-large);
+  --discovery-sidebar-panel-padding: var(--space-4);
+  --discovery-sidebar-panel-title-size: var(--font-0);
+  --discovery-sidebar-panel-text-size: var(--font-down-1);
+  --discovery-sidebar-panel-muted: var(--primary-medium);
+  --discovery-sidebar-panel-accent: var(--tertiary);
+  --discovery-sidebar-row-hover-bg: var(--primary-very-low);
+  --discovery-sidebar-mark-size: 1.25rem;
+}

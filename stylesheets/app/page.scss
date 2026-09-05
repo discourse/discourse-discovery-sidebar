@@ -1,0 +1,7 @@
+// Pages with a sidebar switch between scrolling and not scrolling as the
+// topic list length changes; without a reserved gutter the appearing
+// scrollbar shifts the whole layout. Only matters where scrollbars take
+// space (not overlay scrollbars).
+html {
+  scrollbar-gutter: stable;
+}

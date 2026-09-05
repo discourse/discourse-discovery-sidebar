@@ -1,0 +1,27 @@
+.category-mark {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--discovery-sidebar-mark-size);
+  height: var(--discovery-sidebar-mark-size);
+
+  .emoji {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .d-icon {
+    width: 100%;
+    height: 100%;
+    color: var(--category-badge-color);
+  }
+
+  &__square {
+    width: 0.6em;
+    height: 0.6em;
+    border-radius: var(--category-badge-border-radius, 2px);
+    background: var(--category-badge-color);
+  }
+}

@@ -1,0 +1,98 @@
+// Core wraps discovery pages in .discovery-layout whenever a layout is
+// registered for the sidebar-discovery outlet, and ships no styles for it.
+// Markup: .discovery-layout > [__category-header, __above-navigation,
+// __navigation, __content > [__list, __sidebar, plugin outlets]].
+//
+// Everything only applies while a panel is actually rendered, so pages
+// without matching instances keep the stock full-width list.
+.discovery-layout:has(.block-panel) {
+  @include viewport.from(lg) {
+    @if $sidebar_position == "below-navbar" {
+      // Navbar stays full width; the content wrapper is the two-column grid.
+      .discovery-layout__content {
+        display: grid;
+        grid-template-columns:
+          minmax(0, 1fr)
+          var(--discovery-sidebar-width);
+        grid-template-rows: repeat(4, auto) 1fr;
+        column-gap: var(--discovery-sidebar-gap);
+
+        > * {
+          grid-column: 1;
+        }
+      }
+    } @else {
+      // The outer wrapper is the grid; header, navigation, list and plugin
+      // outlets all join column one and the sidebar spans every row.
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1fr)
+        var(--discovery-sidebar-width);
+
+      // the trailing 1fr row absorbs leftover height when the sidebar is
+      // taller than the list, instead of opening gaps between the rows above
+      grid-template-rows: repeat(8, auto) 1fr;
+      column-gap: var(--discovery-sidebar-gap);
+
+      > * {
+        grid-column: 1;
+      }
+
+      .discovery-layout__content {
+        display: contents;
+
+        > * {
+          grid-column: 1;
+        }
+      }
+    }
+
+    .discovery-layout__sidebar {
+      grid-column: 2;
+      grid-row: 1 / -1;
+    }
+  }
+
+  // Single column: the sidebar moves above everything else and only panels
+  // flagged for mobile stay visible.
+  @include viewport.until(lg) {
+    display: flex;
+    flex-direction: column;
+
+    .discovery-layout__content {
+      display: contents;
+    }
+
+    .discovery-layout__sidebar {
+      order: -1;
+      margin-block-end: var(--space-4);
+
+      .block-panel:not(.--mobile) {
+        display: none;
+      }
+
+      &:not(:has(.block-panel.--mobile)) {
+        display: none;
+      }
+    }
+  }
+}
+
+.sidebar-discovery {
+  // the outlet, any group, and each block wrapper stack their children with
+  // the same gap: a block with several instances renders them all inside
+  // one wrapper, so the wrapper needs the gap too
+  &__layout,
+  &__block-container,
+  &__block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--discovery-sidebar-panel-gap);
+  }
+
+  // core keeps a wrapper per block even when the block renders no panel
+  // (no matching instance); an empty flex item would still take a gap
+  &__block:not(:has(.block-panel)) {
+    display: none;
+  }
+}

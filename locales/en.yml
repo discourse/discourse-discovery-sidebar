@@ -1,6 +1,95 @@
 en:
   theme_metadata:
-    description: 'Configurable discovery sidebar blocks: space, leaderboard and resources
-      panels driven by theme settings.'
+    description: "Configurable discovery sidebar: space, leaderboard and resource panels next to topic lists, driven by theme settings."
     settings:
-      example_setting: A description of a setting.
+      sidebar_position:
+        description: "Where the discovery sidebar sits on wide screens."
+        choices:
+          aside: "Aside: full height, next to the navbar and the list"
+          below-navbar: "Below navbar: navbar stays full width, sidebar starts next to the list"
+      space:
+        description: "Space panels. On a category page: the top-level category and its subcategories. On global lists: all top-level categories. One entry per panel."
+        schema:
+          properties:
+            placement:
+              label: "Placement"
+              description: "Where this panel renders. Choose none to disable it."
+            categories:
+              label: "Categories"
+              description: "Only show on these categories and their subcategories. Leave empty to make this the default panel, shown wherever no category-specific entry matches."
+            title:
+              label: "Title"
+              description: "Panel heading on global lists. Leave empty for \"Spaces\". On category pages the space itself is the heading."
+            mobile:
+              label: "Show on small screens"
+              description: "Keep this panel when the sidebar stacks above the list."
+            show_description:
+              label: "Show description"
+              description: "Show the space's description on category pages."
+            show_topic_counts:
+              label: "Show topic counts"
+      leaderboard:
+        description: "Leaderboard panels from the gamification plugin. One entry per panel; scope entries to categories for a leaderboard per space."
+        schema:
+          properties:
+            placement:
+              label: "Placement"
+              description: "Where this panel renders. Choose none to disable it."
+            categories:
+              label: "Categories"
+              description: "Only show on these categories and their subcategories. Leave empty to make this the default panel, shown wherever no category-specific entry matches."
+            title:
+              label: "Title"
+              description: "Panel heading, for example \"Top contributors\"."
+            mobile:
+              label: "Show on small screens"
+              description: "Keep this panel when the sidebar stacks above the list."
+            leaderboard_id:
+              label: "Leaderboard ID"
+              description: "From the gamification admin. Leave empty for the site's default leaderboard."
+            count:
+              label: "Users"
+              description: "How many users to list. Default 5."
+            period:
+              label: "Period"
+            title_icon:
+              label: "Title icon"
+      resources:
+        description: "Resource link panels. One entry per panel with its own list of links."
+        schema:
+          properties:
+            placement:
+              label: "Placement"
+              description: "Where this panel renders. Choose none to disable it."
+            categories:
+              label: "Categories"
+              description: "Only show on these categories and their subcategories. Leave empty to make this the default panel, shown wherever no category-specific entry matches."
+            title:
+              label: "Title"
+            mobile:
+              label: "Show on small screens"
+              description: "Keep this panel when the sidebar stacks above the list."
+            title_icon:
+              label: "Title icon"
+            links:
+              label: "Links"
+              schema:
+                properties:
+                  label:
+                    label: "Label"
+                  url:
+                    label: "URL"
+                    description: "Absolute, or a path on this site such as /guidelines."
+                  icon:
+                    label: "Icon"
+                  description:
+                    label: "Description"
+  space:
+    all_spaces: "Spaces"
+    all_spaces_link: "All spaces"
+    topic_count:
+      one: "%{count} topic"
+      other: "%{count} topics"
+  leaderboard:
+    view_all: "View leaderboard"
+    empty: "No scores yet"

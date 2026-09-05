@@ -1,0 +1,48 @@
+.block-leaderboard {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__row {
+    @include block-panel-row;
+    @include block-panel-row-hover;
+  }
+
+  &__rank {
+    width: 1.5em;
+    color: var(--discovery-sidebar-panel-muted);
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+  }
+
+  &__name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &,
+    &:visited,
+    &:hover,
+    &:focus-visible {
+      color: var(--primary);
+    }
+  }
+
+  &__score {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+
+  &__empty {
+    margin: 0;
+    color: var(--discovery-sidebar-panel-muted);
+    font-size: var(--discovery-sidebar-panel-text-size);
+  }
+}

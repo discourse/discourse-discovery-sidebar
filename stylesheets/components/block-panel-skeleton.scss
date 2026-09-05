@@ -1,0 +1,22 @@
+.block-panel-skeleton {
+  --d-skeleton-fill: var(--primary-low);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  &__row {
+    @include block-panel-row;
+
+    // the name line grows, the trailing score keeps its width
+    > .d-skeleton:nth-child(2) {
+      flex: 1;
+    }
+  }
+
+  &__lines {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+}

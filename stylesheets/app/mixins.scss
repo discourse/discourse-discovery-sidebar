@@ -1,0 +1,58 @@
+// Panel chrome, used by the block-panel component. Padding lives on the
+// header, body and footer, not on the box.
+@mixin block-panel {
+  box-sizing: border-box;
+  background: var(--discovery-sidebar-panel-bg);
+  border: var(--discovery-sidebar-panel-border);
+  border-radius: var(--discovery-sidebar-panel-radius);
+  overflow: hidden;
+}
+
+@mixin block-panel-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--discovery-sidebar-panel-padding);
+  border-bottom: var(--discovery-sidebar-panel-border);
+}
+
+@mixin block-panel-body {
+  padding: var(--discovery-sidebar-panel-padding);
+}
+
+@mixin block-panel-footer {
+  padding: var(--space-2) var(--discovery-sidebar-panel-padding);
+  border-top: var(--discovery-sidebar-panel-border);
+  text-align: center;
+}
+
+// A row inside a panel body: mark or avatar, text, trailing meta.
+@mixin block-panel-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2rem;
+  font-size: var(--discovery-sidebar-panel-text-size);
+
+  // rows read as text in every state, visited included; a block that wants
+  // accent on hover or current (the space block) sets it itself
+  &,
+  &:visited,
+  &:hover,
+  &:focus-visible {
+    color: var(--primary);
+  }
+}
+
+// Hover highlight for an interactive row: bleeds into the body padding so the
+// tint spans the panel width, text colour is left to the block.
+@mixin block-panel-row-hover {
+  padding: var(--space-1) var(--space-2);
+  margin-inline: calc(-1 * var(--space-2));
+  border-radius: var(--d-border-radius);
+
+  &:hover,
+  &:focus-within {
+    background: var(--discovery-sidebar-row-hover-bg);
+  }
+}

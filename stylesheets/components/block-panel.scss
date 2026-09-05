@@ -1,0 +1,33 @@
+.block-panel {
+  @include block-panel;
+
+  &__header {
+    @include block-panel-header;
+  }
+
+  &__icon {
+    display: inline-flex;
+    color: var(--discovery-sidebar-panel-muted);
+  }
+
+  &__title {
+    margin: 0;
+    font-size: var(--discovery-sidebar-panel-title-size);
+    font-weight: 600;
+    line-height: var(--line-height-medium);
+  }
+
+  &__body {
+    @include block-panel-body;
+  }
+
+  &__footer {
+    @include block-panel-footer;
+  }
+
+  &__link {
+    color: var(--discovery-sidebar-panel-accent);
+    font-size: var(--discovery-sidebar-panel-text-size);
+    font-weight: 600;
+  }
+}

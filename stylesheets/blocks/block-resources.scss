@@ -1,0 +1,48 @@
+.block-resources {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__link {
+    @include block-panel-row;
+    @include block-panel-row-hover;
+    align-items: flex-start;
+
+    &:hover .block-resources__label,
+    &:focus-visible .block-resources__label {
+      text-decoration: underline;
+    }
+  }
+
+  &__icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    align-items: center;
+    justify-content: center;
+    color: var(--discovery-sidebar-panel-accent);
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
+  &__label {
+    font-weight: 600;
+  }
+
+  &__description {
+    color: var(--discovery-sidebar-panel-muted);
+    font-size: var(--font-down-1);
+    line-height: var(--line-height-medium);
+  }
+}
