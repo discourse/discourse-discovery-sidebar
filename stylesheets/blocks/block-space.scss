@@ -1,29 +1,28 @@
 .block-space {
-  &__head {
-    @include block-panel-row;
-    align-items: flex-start;
-    margin-bottom: var(--space-4);
-
-    .category-mark {
-      --discovery-sidebar-mark-size: 1.75rem;
-    }
-
-    .block-space__name {
-      font-size: var(--discovery-sidebar-panel-heading-size);
-      font-weight: 700;
-    }
-  }
-
-  &__text {
+  // the space name row and its description, stacked above the subcategories
+  &__intro {
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
+    margin-bottom: var(--space-4);
   }
 
+  &__head {
+    @include block-panel-row;
+
+    // the space name is this panel's title: same size and weight as a header
+    .block-space__name {
+      font-size: var(--tc-discoverySidebar-panel-title-size);
+      font-weight: 600;
+    }
+  }
+
+  // same style as a resource description
   &__description {
-    color: var(--discovery-sidebar-panel-muted);
-    font-size: var(--discovery-sidebar-panel-text-size);
-    line-height: var(--line-height-large);
+    margin: 0;
+    color: var(--tc-discoverySidebar-panel-muted);
+    font-size: var(--tc-discoverySidebar-panel-meta-size);
+    line-height: var(--line-height-medium);
   }
 
   &__list {
@@ -48,8 +47,7 @@
   }
 
   &__count {
-    color: var(--discovery-sidebar-panel-muted);
-    font-size: var(--discovery-sidebar-panel-meta-size);
+    color: var(--tc-discoverySidebar-panel-muted);
     white-space: nowrap;
   }
 
@@ -57,15 +55,26 @@
   &__link:focus-visible .block-space__name,
   &__head:hover .block-space__name,
   &__head:focus-visible .block-space__name {
-    color: var(--discovery-sidebar-panel-accent);
+    color: var(--tc-discoverySidebar-panel-accent);
   }
 
-  .--current &__link,
-  &__head.--current {
+  .--current &__link {
     font-weight: 700;
 
     .block-space__name {
-      color: var(--discovery-sidebar-panel-accent);
+      color: var(--tc-discoverySidebar-panel-accent);
+    }
+  }
+
+  // on the space's own pages the name takes the accent and the description
+  // firms up with it
+  &__intro.--current {
+    .block-space__name {
+      color: var(--tc-discoverySidebar-panel-accent);
+    }
+
+    .block-space__description {
+      font-weight: 600;
     }
   }
 }

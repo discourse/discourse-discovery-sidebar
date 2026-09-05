@@ -66,23 +66,22 @@ export default class BlockSpace extends Component {
           class="block-space"
         >
           <:content>
-            <a
-              class="block-space__head
+            <div
+              class="block-space__intro
                 {{if (this.isCurrent this.space) '--current'}}"
-              href={{this.space.url}}
             >
-              <CategoryMark @category={{this.space}} />
-              <span class="block-space__text">
+              <a class="block-space__head" href={{this.space.url}}>
+                <CategoryMark @category={{this.space}} />
                 <span class="block-space__name">{{this.space.name}}</span>
-                {{#if instance.show_description}}
-                  {{#if this.space.description_text}}
-                    <span
-                      class="block-space__description"
-                    >{{this.space.description_text}}</span>
-                  {{/if}}
+              </a>
+              {{#if instance.show_description}}
+                {{#if this.space.description_text}}
+                  <p
+                    class="block-space__description"
+                  >{{this.space.description_text}}</p>
                 {{/if}}
-              </span>
-            </a>
+              {{/if}}
+            </div>
 
             {{#if this.subcategories.length}}
               <ul class="block-space__list">

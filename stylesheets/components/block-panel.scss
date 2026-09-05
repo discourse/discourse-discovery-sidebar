@@ -7,12 +7,12 @@
 
   &__icon {
     display: inline-flex;
-    color: var(--discovery-sidebar-panel-muted);
+    color: var(--tc-discoverySidebar-panel-muted);
   }
 
   &__title {
     margin: 0;
-    font-size: var(--discovery-sidebar-panel-title-size);
+    font-size: var(--tc-discoverySidebar-panel-title-size);
     font-weight: 600;
     line-height: var(--line-height-medium);
   }
@@ -26,8 +26,8 @@
   }
 
   &__link {
-    color: var(--discovery-sidebar-panel-accent);
-    font-size: var(--discovery-sidebar-panel-text-size);
+    color: var(--tc-discoverySidebar-panel-accent);
+    font-size: var(--tc-discoverySidebar-panel-meta-size);
     font-weight: 600;
   }
 }

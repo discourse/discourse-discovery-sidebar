@@ -26,7 +26,7 @@
     height: 1.25rem;
     align-items: center;
     justify-content: center;
-    color: var(--discovery-sidebar-panel-accent);
+    color: var(--tc-discoverySidebar-panel-accent);
   }
 
   &__text {
@@ -41,8 +41,7 @@
   }
 
   &__description {
-    color: var(--discovery-sidebar-panel-muted);
-    font-size: var(--discovery-sidebar-panel-meta-size);
+    color: var(--tc-discoverySidebar-panel-muted);
     line-height: var(--line-height-medium);
   }
 }

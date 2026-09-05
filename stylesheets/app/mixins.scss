@@ -2,9 +2,9 @@
 // header, body and footer, not on the box.
 @mixin block-panel {
   box-sizing: border-box;
-  background: var(--discovery-sidebar-panel-bg);
-  border: var(--discovery-sidebar-panel-border);
-  border-radius: var(--discovery-sidebar-panel-radius);
+  background: var(--tc-discoverySidebar-panel-bg);
+  border: var(--tc-discoverySidebar-panel-border);
+  border-radius: var(--tc-discoverySidebar-panel-radius);
   overflow: hidden;
 }
 
@@ -12,17 +12,17 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--discovery-sidebar-panel-padding);
-  border-bottom: var(--discovery-sidebar-panel-border);
+  padding: var(--tc-discoverySidebar-panel-padding);
+  border-bottom: var(--tc-discoverySidebar-panel-border);
 }
 
 @mixin block-panel-body {
-  padding: var(--discovery-sidebar-panel-padding);
+  padding: var(--tc-discoverySidebar-panel-padding);
 }
 
 @mixin block-panel-footer {
-  padding: var(--space-2) var(--discovery-sidebar-panel-padding);
-  border-top: var(--discovery-sidebar-panel-border);
+  padding: var(--space-2) var(--tc-discoverySidebar-panel-padding);
+  border-top: var(--tc-discoverySidebar-panel-border);
   text-align: center;
 }
 
@@ -32,7 +32,7 @@
   align-items: center;
   gap: var(--space-2);
   min-height: 2rem;
-  font-size: var(--discovery-sidebar-panel-text-size);
+  font-size: var(--tc-discoverySidebar-panel-meta-size);
 
   // rows read as text in every state, visited included; a block that wants
   // accent on hover or current (the space block) sets it itself
@@ -53,6 +53,6 @@
 
   &:hover,
   &:focus-within {
-    background: var(--discovery-sidebar-row-hover-bg);
+    background: var(--tc-discoverySidebar-row-hover-bg);
   }
 }

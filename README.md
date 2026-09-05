@@ -16,21 +16,19 @@ All sizes and colours come from tokens on `:root`, derived from core variables. 
 
 ```scss
 :root {
-  --discovery-sidebar-width: 18rem;
-  --discovery-sidebar-gap: var(--space-6);
-  --discovery-sidebar-panel-gap: var(--space-4);
-  --discovery-sidebar-panel-bg: var(--secondary);
-  --discovery-sidebar-panel-border: 1px solid var(--primary-low);
-  --discovery-sidebar-panel-radius: var(--d-border-radius-large);
-  --discovery-sidebar-panel-padding: var(--space-4);
-  --discovery-sidebar-panel-title-size: 1rem;
-  --discovery-sidebar-panel-heading-size: 1.125rem;
-  --discovery-sidebar-panel-text-size: 0.875rem;
-  --discovery-sidebar-panel-meta-size: 0.75rem;
-  --discovery-sidebar-panel-muted: var(--primary-medium);
-  --discovery-sidebar-panel-accent: var(--tertiary);
-  --discovery-sidebar-row-hover-bg: var(--primary-very-low);
-  --discovery-sidebar-mark-size: 1.25rem;
+  --tc-discoverySidebar-width: 18rem;
+  --tc-discoverySidebar-gap: var(--space-6);
+  --tc-discoverySidebar-panel-gap: var(--space-4);
+  --tc-discoverySidebar-panel-bg: var(--secondary);
+  --tc-discoverySidebar-panel-border: 1px solid var(--primary-low);
+  --tc-discoverySidebar-panel-radius: var(--d-border-radius-large);
+  --tc-discoverySidebar-panel-padding: var(--space-4);
+  --tc-discoverySidebar-panel-title-size: 1rem;
+  --tc-discoverySidebar-panel-meta-size: 0.875rem;
+  --tc-discoverySidebar-panel-muted: var(--primary-medium);
+  --tc-discoverySidebar-panel-accent: var(--tertiary);
+  --tc-discoverySidebar-row-hover-bg: var(--primary-very-low);
+  --tc-discoverySidebar-mark-size: 1.25rem;
 }
 ```
 
@@ -38,7 +36,7 @@ Themes with a fixed page width can widen it while a panel renders:
 
 ```scss
 #main-outlet-wrapper:has(.discovery-layout .block-panel) {
-  --d-max-width: calc(1000px + var(--discovery-sidebar-width) + var(--discovery-sidebar-gap));
+  --d-max-width: calc(1000px + var(--tc-discoverySidebar-width) + var(--tc-discoverySidebar-gap));
 }
 ```
 
