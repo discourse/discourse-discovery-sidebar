@@ -47,10 +47,3 @@ Hide the category and tag dropdowns in the navbar while a panel renders:
   display: none;
 }
 ```
-
-## Development
-
-```sh
-pnpm install
-pnpm lint
-```
