@@ -73,6 +73,14 @@ export default class BlockSpace extends Component {
               <a class="block-space__head" href={{this.space.url}}>
                 <CategoryMark @category={{this.space}} />
                 <span class="block-space__name">{{this.space.name}}</span>
+                {{#if instance.show_topic_counts}}
+                  <span class="block-space__count">
+                    {{i18n
+                      (themePrefix "space.topic_count")
+                      count=this.space.totalTopicCount
+                    }}
+                  </span>
+                {{/if}}
               </a>
               {{#if instance.show_description}}
                 {{#if this.space.description_text}}
@@ -137,7 +145,7 @@ export default class BlockSpace extends Component {
                       <span class="block-space__count">
                         {{i18n
                           (themePrefix "space.topic_count")
-                          count=category.topic_count
+                          count=category.totalTopicCount
                         }}
                       </span>
                     {{/if}}
