@@ -1,0 +1,6 @@
+en:
+  theme_metadata:
+    description: 'Configurable discovery sidebar blocks: space, leaderboard and resources
+      panels driven by theme settings.'
+    settings:
+      example_setting: A description of a setting.
