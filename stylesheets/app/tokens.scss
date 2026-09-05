@@ -8,8 +8,13 @@
   --discovery-sidebar-panel-border: 1px solid var(--primary-low);
   --discovery-sidebar-panel-radius: var(--d-border-radius-large);
   --discovery-sidebar-panel-padding: var(--space-4);
-  --discovery-sidebar-panel-title-size: var(--font-0);
-  --discovery-sidebar-panel-text-size: var(--font-down-1);
+
+  // Type sizes in rem: core's --font-* scale is em-based and compounds when
+  // nested, so panels never use it
+  --discovery-sidebar-panel-title-size: 1rem;
+  --discovery-sidebar-panel-heading-size: 1.125rem;
+  --discovery-sidebar-panel-text-size: 0.875rem;
+  --discovery-sidebar-panel-meta-size: 0.75rem;
   --discovery-sidebar-panel-muted: var(--primary-medium);
   --discovery-sidebar-panel-accent: var(--tertiary);
   --discovery-sidebar-row-hover-bg: var(--primary-very-low);

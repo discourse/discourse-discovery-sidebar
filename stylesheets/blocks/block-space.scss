@@ -9,7 +9,7 @@
     }
 
     .block-space__name {
-      font-size: var(--font-up-1);
+      font-size: var(--discovery-sidebar-panel-heading-size);
       font-weight: 700;
     }
   }
@@ -49,7 +49,7 @@
 
   &__count {
     color: var(--discovery-sidebar-panel-muted);
-    font-size: var(--font-down-1);
+    font-size: var(--discovery-sidebar-panel-meta-size);
     white-space: nowrap;
   }
 
