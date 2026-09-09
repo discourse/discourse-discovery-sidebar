@@ -39,6 +39,11 @@ function normalizeLink(link) {
 // transfers to it unchanged.
 @block("theme:discovery-sidebar:resources", {
   description: "A titled list of resource links",
+  args: {
+    title: { type: "string", required: true },
+    icon: { type: "string" },
+    mobile: { type: "boolean", default: false },
+  },
 })
 export default class BlockResources extends Component {
   @service discovery;
@@ -53,8 +58,9 @@ export default class BlockResources extends Component {
   <template>
     {{#if this.links.length}}
       <BlockPanel
-        @title={{i18n (themePrefix "resources.title")}}
-        @icon="book"
+        @title={{i18n (themePrefix @title)}}
+        @icon={{@icon}}
+        @mobile={{@mobile}}
         class="block-resources"
       >
         <:content>

@@ -16,14 +16,33 @@ export default apiInitializer((api) => {
         {
           block: BlockSpace,
           id: "space",
+          args: {
+            title: "space.all_spaces",
+            icon: "compass",
+            mobile: true,
+            showDescription: true,
+            showTopicCounts: true,
+          },
         },
         {
           block: BlockLeaderboard,
           id: "leaderboard",
+          args: {
+            title: "leaderboard.title",
+            icon: "trophy",
+            mobile: false,
+            count: 5,
+            period: "monthly",
+          },
         },
         {
           block: BlockResources,
           id: "resources",
+          args: {
+            title: "resources.title",
+            icon: "book",
+            mobile: false,
+          },
         },
       ],
     },

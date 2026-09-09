@@ -20,6 +20,9 @@ import { instancesFor } from "../lib/block-instances";
 @block("theme:discovery-sidebar:leaderboard", {
   description: "Top users of a gamification leaderboard",
   args: {
+    title: { type: "string", required: true },
+    icon: { type: "string" },
+    mobile: { type: "boolean", default: false },
     count: { type: "number", default: 5 },
     period: {
       type: "string",
@@ -73,8 +76,9 @@ export default class BlockLeaderboard extends Component {
   <template>
     {{#if this.entry}}
       <BlockPanel
-        @title={{i18n (themePrefix "leaderboard.title")}}
-        @icon="trophy"
+        @title={{i18n (themePrefix @title)}}
+        @icon={{@icon}}
+        @mobile={{@mobile}}
         @asyncData={{this.fetchLeaderboard}}
         @context={{this.context}}
         @skeleton={{this.skeleton}}

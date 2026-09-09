@@ -10,11 +10,18 @@ import { rootCategory } from "../lib/block-instances";
 
 // The current space: the top-level category of the page and all its
 // subcategories, the current one highlighted. On global lists (Latest, Top,
-// tags) the panel lists every top-level category instead. Everything comes
-// from the route and the site's category list, so there is no setting and no
-// loading state.
+// tags) the panel lists every top-level category instead, under @title. All
+// content comes from the route and the site's category list, so there is no
+// setting and no loading state; the args are display choices.
 @block("theme:discovery-sidebar:space", {
   description: "The current top-level category and its subcategories",
+  args: {
+    title: { type: "string", required: true },
+    icon: { type: "string" },
+    mobile: { type: "boolean", default: false },
+    showDescription: { type: "boolean", default: true },
+    showTopicCounts: { type: "boolean", default: true },
+  },
 })
 export default class BlockSpace extends Component {
   @service discovery;
@@ -50,7 +57,7 @@ export default class BlockSpace extends Component {
 
   <template>
     {{#if this.space}}
-      <BlockPanel @mobile={{true}} class="block-space">
+      <BlockPanel @mobile={{@mobile}} class="block-space">
         <:content>
           <div
             class="block-space__intro
@@ -59,17 +66,21 @@ export default class BlockSpace extends Component {
             <a class="block-space__head" href={{this.space.url}}>
               <CategoryMark @category={{this.space}} />
               <span class="block-space__name">{{this.space.name}}</span>
-              <span class="block-space__count">
-                {{i18n
-                  (themePrefix "space.topic_count")
-                  count=this.space.totalTopicCount
-                }}
-              </span>
+              {{#if @showTopicCounts}}
+                <span class="block-space__count">
+                  {{i18n
+                    (themePrefix "space.topic_count")
+                    count=this.space.totalTopicCount
+                  }}
+                </span>
+              {{/if}}
             </a>
-            {{#if this.space.description_text}}
-              <p
-                class="block-space__description"
-              >{{this.space.description_text}}</p>
+            {{#if @showDescription}}
+              {{#if this.space.description_text}}
+                <p
+                  class="block-space__description"
+                >{{this.space.description_text}}</p>
+              {{/if}}
             {{/if}}
           </div>
 
@@ -83,12 +94,14 @@ export default class BlockSpace extends Component {
                   <a class="block-space__link" href={{subcategory.url}}>
                     <CategoryMark @category={{subcategory}} />
                     <span class="block-space__name">{{subcategory.name}}</span>
-                    <span class="block-space__count">
-                      {{i18n
-                        (themePrefix "space.topic_count")
-                        count=subcategory.topic_count
-                      }}
-                    </span>
+                    {{#if @showTopicCounts}}
+                      <span class="block-space__count">
+                        {{i18n
+                          (themePrefix "space.topic_count")
+                          count=subcategory.topic_count
+                        }}
+                      </span>
+                    {{/if}}
                   </a>
                 </li>
               {{/each}}
@@ -103,9 +116,9 @@ export default class BlockSpace extends Component {
       </BlockPanel>
     {{else if this.topLevelCategories.length}}
       <BlockPanel
-        @title={{i18n (themePrefix "space.all_spaces")}}
-        @icon="compass"
-        @mobile={{true}}
+        @title={{i18n (themePrefix @title)}}
+        @icon={{@icon}}
+        @mobile={{@mobile}}
         class="block-space --global"
       >
         <:content>
@@ -115,12 +128,14 @@ export default class BlockSpace extends Component {
                 <a class="block-space__link" href={{category.url}}>
                   <CategoryMark @category={{category}} />
                   <span class="block-space__name">{{category.name}}</span>
-                  <span class="block-space__count">
-                    {{i18n
-                      (themePrefix "space.topic_count")
-                      count=category.totalTopicCount
-                    }}
-                  </span>
+                  {{#if @showTopicCounts}}
+                    <span class="block-space__count">
+                      {{i18n
+                        (themePrefix "space.topic_count")
+                        count=category.totalTopicCount
+                      }}
+                    </span>
+                  {{/if}}
                 </a>
               </li>
             {{/each}}

@@ -2,7 +2,7 @@
 
 A theme component that adds a configurable sidebar next to Discourse topic lists, built on the Blocks API. Works with any theme: install it as a component, then restyle it through CSS tokens.
 
-Three blocks. Settings hold only what differs per site: which leaderboard a category shows, and which links a resource panel lists. Everything else is fixed.
+Three blocks. Display choices are args in the layout file: panel titles and icons, whether a panel stays on small screens, the space block's description and topic counts, the leaderboard's user count and period. Settings hold only what differs per site: which leaderboard a category shows, and which links a resource panel lists.
 
 - **Space** — on a category page, the top-level category and its subcategories; on global lists, all top-level categories. No settings.
 - **Leaderboard** — the gamification leaderboard from the `leaderboards` setting: the entry scoped to the current category, else the unscoped default.
