@@ -12,62 +12,72 @@ import { i18n } from "discourse-i18n";
 import BlockPanel from "../components/block-panel";
 import { instancesFor } from "../lib/block-instances";
 
-// A gamification leaderboard per instance. Arg names follow the gamification
-// plugin's block on core's wireframe branch (leaderboardId, count, period).
+// The leaderboard from the `leaderboards` setting: the entry scoped to the
+// current category, else the unscoped default. No matching entry renders
+// nothing; an entry without an id shows the plugin's default leaderboard. Arg
+// names follow the gamification plugin's block on core's wireframe branch
+// (count, period).
 @block("theme:discovery-sidebar:leaderboard", {
   description: "Top users of a gamification leaderboard",
   args: {
-    placement: { type: "string", enum: ["discovery-sidebar"], required: true },
+    count: { type: "number", default: 5 },
+    period: {
+      type: "string",
+      default: "monthly",
+      enum: ["all_time", "yearly", "quarterly", "monthly", "weekly", "daily"],
+    },
   },
 })
 export default class BlockLeaderboard extends Component {
   @service discovery;
   @service siteSettings;
 
-  leaderboardUrl = (instance, data) => {
-    const id = instance.leaderboard_id || data?.leaderboard?.id;
-    return getURL(id ? `/leaderboard/${id}` : "/leaderboard");
-  };
-
-  skeletonFor = (instance) => ({ rows: "user", count: instance.count ?? 5 });
-
   displayName = (user) =>
     this.siteSettings.prioritize_username_in_ux
       ? user.username
       : user.name || user.username;
 
-  get instances() {
-    return instancesFor(settings.leaderboard, {
-      placement: this.args.placement,
+  get entry() {
+    return instancesFor(settings.leaderboards, {
       category: this.discovery.category,
-    });
+    })[0];
   }
 
-  // DAsyncContent refetches when the context object changes; the instance is
-  // the context, so each panel loads its own leaderboard.
+  get path() {
+    const id = this.entry?.leaderboard_id;
+    return id ? `/leaderboard/${id}` : "/leaderboard";
+  }
+
+  get leaderboardUrl() {
+    return getURL(this.path);
+  }
+
+  get skeleton() {
+    return { rows: "user", count: this.args.count };
+  }
+
+  // DAsyncContent refetches when the context object changes; the path is the
+  // context, so the panel reloads when the category picks another leaderboard.
+  get context() {
+    return { path: this.path };
+  }
+
   @bind
-  async fetchLeaderboard(instance) {
-    const path = instance.leaderboard_id
-      ? `/leaderboard/${instance.leaderboard_id}`
-      : "/leaderboard";
+  async fetchLeaderboard({ path }) {
     const result = await ajax(path, {
-      data: {
-        user_limit: instance.count ?? 5,
-        period: instance.period ?? "monthly",
-      },
+      data: { user_limit: this.args.count, period: this.args.period },
     });
     return result?.users?.length ? result : null;
   }
 
   <template>
-    {{#each this.instances key="title" as |instance|}}
+    {{#if this.entry}}
       <BlockPanel
-        @title={{instance.title}}
-        @icon={{instance.title_icon}}
-        @mobile={{instance.mobile}}
+        @title={{i18n (themePrefix "leaderboard.title")}}
+        @icon="trophy"
         @asyncData={{this.fetchLeaderboard}}
-        @context={{instance}}
-        @skeleton={{this.skeletonFor instance}}
+        @context={{this.context}}
+        @skeleton={{this.skeleton}}
         class="block-leaderboard"
       >
         <:content as |data|>
@@ -92,12 +102,11 @@ export default class BlockLeaderboard extends Component {
           </p>
         </:empty>
         <:footer>
-          <a
-            class="block-panel__link"
-            href={{this.leaderboardUrl instance}}
-          >{{i18n (themePrefix "leaderboard.view_all")}}</a>
+          <a class="block-panel__link" href={{this.leaderboardUrl}}>
+            {{i18n (themePrefix "leaderboard.view_all")}}
+          </a>
         </:footer>
       </BlockPanel>
-    {{/each}}
+    {{/if}}
   </template>
 }

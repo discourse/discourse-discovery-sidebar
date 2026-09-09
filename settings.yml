@@ -5,93 +5,30 @@ sidebar_position:
     - aside
     - below-navbar
 
-# Each setting holds the instances of one block. Every entry renders one panel.
-# Shared instance fields: placement, categories (scope), title, mobile.
-
-space:
+# Which gamification leaderboard the leaderboard block shows. An entry scoped
+# to categories applies on those categories and their subcategories; the
+# unscoped entry everywhere else. No id means the plugin's default leaderboard.
+leaderboards:
   type: objects
   default:
-    - placement: discovery-sidebar
-      mobile: true
-      show_description: true
-      show_topic_counts: true
-  schema:
-    name: space
-    identifier: title
-    properties:
-      placement:
-        type: enum
-        required: true
-        default: discovery-sidebar
-        choices:
-          - discovery-sidebar
-          - none
-      categories:
-        type: categories
-      title:
-        type: string
-      mobile:
-        type: boolean
-      show_description:
-        type: boolean
-      show_topic_counts:
-        type: boolean
-
-leaderboard:
-  type: objects
-  default:
-    - placement: discovery-sidebar
-      title: "Top contributors"
-      title_icon: trophy
-      count: 5
-      period: monthly
+    - {}
   schema:
     name: leaderboard
-    identifier: title
+    identifier: categories
     properties:
-      placement:
-        type: enum
-        required: true
-        default: discovery-sidebar
-        choices:
-          - discovery-sidebar
-          - none
       categories:
         type: categories
-      title:
-        type: string
-      mobile:
-        type: boolean
       leaderboard_id:
         type: integer
         validations:
-          min: 0
-      count:
-        type: integer
-        validations:
           min: 1
-          max: 20
-      period:
-        type: enum
-        required: true
-        default: monthly
-        choices:
-          - all_time
-          - yearly
-          - quarterly
-          - monthly
-          - weekly
-          - daily
-      title_icon:
-        type: icon
 
+# Which links the resources block lists. An entry scoped to categories applies
+# on those categories and their subcategories; an unscoped entry everywhere else.
 resources:
   type: objects
   default:
-    - placement: discovery-sidebar
-      title: "Resources"
-      title_icon: book
-      links:
+    - links:
         - label: "Community guidelines"
           url: "/guidelines"
           icon: "circle-check"
@@ -105,24 +42,10 @@ resources:
           icon: "circle-info"
   schema:
     name: resources
-    identifier: title
+    identifier: categories
     properties:
-      placement:
-        type: enum
-        required: true
-        default: discovery-sidebar
-        choices:
-          - discovery-sidebar
-          - none
       categories:
         type: categories
-      title:
-        type: string
-        required: true
-      mobile:
-        type: boolean
-      title_icon:
-        type: icon
       links:
         type: objects
         schema:

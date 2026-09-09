@@ -16,17 +16,14 @@ export default apiInitializer((api) => {
         {
           block: BlockSpace,
           id: "space",
-          args: { placement: "discovery-sidebar" },
         },
         {
           block: BlockLeaderboard,
           id: "leaderboard",
-          args: { placement: "discovery-sidebar" },
         },
         {
           block: BlockResources,
           id: "resources",
-          args: { placement: "discovery-sidebar" },
         },
       ],
     },

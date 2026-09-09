@@ -1,22 +1,16 @@
-// The one place scoping logic lives. An instance is an entry of a block's
-// objects setting. It applies when its placement matches the outlet the block
-// was rendered into and its category scope matches the page:
+// The one place scoping logic lives. An entry of an objects setting applies
+// when its category scope matches the page:
 //
 //   - a scoped entry (categories set) matches when the current category or
-//     its parent is listed; every matching scoped entry renders
-//   - an unscoped entry (no categories) is the fallback: it renders only when
-//     no scoped entry of the same block matches the page
+//     its parent is listed
+//   - an unscoped entry (no categories) is the fallback: it applies only when
+//     no scoped entry of the same setting matches the page
 //
-// So one default panel covers the whole site, and adding a panel for a space
-// replaces the default there instead of stacking on top of it.
+// So one default covers the whole site, and an entry for a space replaces the
+// default there. Blocks use the first entry returned.
 
 export function rootCategory(category) {
   return category?.parentCategory ?? category ?? null;
-}
-
-function placementMatches(entry, placement) {
-  // a fresh entry has no placement yet; treat it as the default sidebar
-  return (entry.placement ?? "discovery-sidebar") === placement;
 }
 
 function scopeMatches(entry, category) {
@@ -29,17 +23,15 @@ function scopeMatches(entry, category) {
   );
 }
 
-export function instancesFor(entries, { placement, category }) {
-  const placed = (entries ?? []).filter((entry) =>
-    placementMatches(entry, placement)
-  );
+export function instancesFor(entries, { category }) {
+  const all = entries ?? [];
 
-  const scoped = placed.filter(
+  const scoped = all.filter(
     (entry) => entry.categories?.length && scopeMatches(entry, category)
   );
   if (scoped.length) {
     return scoped;
   }
 
-  return placed.filter((entry) => !entry.categories?.length);
+  return all.filter((entry) => !entry.categories?.length);
 }
