@@ -30,7 +30,9 @@ const BlockPanel = <template>
           @retainWhileReloading={{true}}
         >
           <:loading>
-            <BlockPanelSkeleton @shape={{@skeleton}} />
+            <div class="block-panel__loading" aria-busy="true">
+              <BlockPanelSkeleton @shape={{@skeleton}} />
+            </div>
           </:loading>
           <:content as |data|>
             {{yield data to="content"}}

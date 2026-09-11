@@ -1,6 +1,6 @@
 import Component from "@glimmer/component";
 import { service } from "@ember/service";
-import { settings, themePrefix } from "virtual:theme";
+import { themePrefix } from "virtual:theme";
 import { block } from "discourse/blocks";
 import { ajax } from "discourse/lib/ajax";
 import { bind } from "discourse/lib/decorators";
@@ -10,19 +10,17 @@ import DUserLink from "discourse/ui-kit/d-user-link";
 import dNumber from "discourse/ui-kit/helpers/d-number";
 import { i18n } from "discourse-i18n";
 import BlockPanel from "../components/block-panel";
-import { instancesFor } from "../lib/block-instances";
 
-// The leaderboard from the `leaderboards` setting: the entry scoped to the
-// current category, else the unscoped default. No matching entry renders
-// nothing; an entry without an id shows the plugin's default leaderboard. Arg
-// names follow the gamification plugin's block on core's wireframe branch
-// (count, period).
+// The layout selects the leaderboard for the current category and passes its
+// id here. A missing id deliberately uses the Gamification plugin's default.
+// Arg names follow its core block (leaderboardId, count, period).
 @block("theme:discovery-sidebar:leaderboard", {
   description: "Top users of a gamification leaderboard",
   args: {
     title: { type: "string", required: true },
     icon: { type: "string" },
     mobile: { type: "boolean", default: false },
+    leaderboardId: { type: "number", integer: true, min: 1 },
     count: { type: "number", default: 5 },
     period: {
       type: "string",
@@ -32,7 +30,6 @@ import { instancesFor } from "../lib/block-instances";
   },
 })
 export default class BlockLeaderboard extends Component {
-  @service discovery;
   @service siteSettings;
 
   displayName = (user) =>
@@ -40,14 +37,8 @@ export default class BlockLeaderboard extends Component {
       ? user.username
       : user.name || user.username;
 
-  get entry() {
-    return instancesFor(settings.leaderboards, {
-      category: this.discovery.category,
-    })[0];
-  }
-
   get path() {
-    const id = this.entry?.leaderboard_id;
+    const id = this.args.leaderboardId;
     return id ? `/leaderboard/${id}` : "/leaderboard";
   }
 
@@ -60,7 +51,7 @@ export default class BlockLeaderboard extends Component {
   }
 
   // DAsyncContent refetches when the context object changes; the path is the
-  // context, so the panel reloads when the category picks another leaderboard.
+  // context, so it reloads when the selected layout entry changes.
   get context() {
     return { path: this.path };
   }
@@ -74,43 +65,41 @@ export default class BlockLeaderboard extends Component {
   }
 
   <template>
-    {{#if this.entry}}
-      <BlockPanel
-        @title={{i18n (themePrefix @title)}}
-        @icon={{@icon}}
-        @mobile={{@mobile}}
-        @asyncData={{this.fetchLeaderboard}}
-        @context={{this.context}}
-        @skeleton={{this.skeleton}}
-        class="block-leaderboard"
-      >
-        <:content as |data|>
-          <ol class="block-leaderboard__list">
-            {{#each data.users as |user|}}
-              <li class="block-leaderboard__row">
-                <span class="block-leaderboard__rank">{{user.position}}</span>
-                <DUserAvatar @user={{user}} @size="small" />
-                <DUserLink @user={{user}} class="block-leaderboard__name">
-                  {{this.displayName user}}
-                </DUserLink>
-                <span class="block-leaderboard__score">
-                  {{dNumber user.total_score}}
-                </span>
-              </li>
-            {{/each}}
-          </ol>
-        </:content>
-        <:empty>
-          <p class="block-leaderboard__empty">
-            {{i18n (themePrefix "leaderboard.empty")}}
-          </p>
-        </:empty>
-        <:footer>
-          <a class="block-panel__link" href={{this.leaderboardUrl}}>
-            {{i18n (themePrefix "leaderboard.view_all")}}
-          </a>
-        </:footer>
-      </BlockPanel>
-    {{/if}}
+    <BlockPanel
+      @title={{i18n (themePrefix @title)}}
+      @icon={{@icon}}
+      @mobile={{@mobile}}
+      @asyncData={{this.fetchLeaderboard}}
+      @context={{this.context}}
+      @skeleton={{this.skeleton}}
+      class="block-leaderboard"
+    >
+      <:content as |data|>
+        <ol class="block-leaderboard__list">
+          {{#each data.users as |user|}}
+            <li class="block-leaderboard__row">
+              <span class="block-leaderboard__rank">{{user.position}}</span>
+              <DUserAvatar @user={{user}} @size="small" />
+              <DUserLink @user={{user}} class="block-leaderboard__name">
+                {{this.displayName user}}
+              </DUserLink>
+              <span class="block-leaderboard__score">
+                {{dNumber user.total_score}}
+              </span>
+            </li>
+          {{/each}}
+        </ol>
+      </:content>
+      <:empty>
+        <p class="block-leaderboard__empty">
+          {{i18n (themePrefix "leaderboard.empty")}}
+        </p>
+      </:empty>
+      <:footer>
+        <a class="block-panel__link" href={{this.leaderboardUrl}}>
+          {{i18n (themePrefix "leaderboard.view_all")}}
+        </a>
+      </:footer>
+    </BlockPanel>
   </template>
 }

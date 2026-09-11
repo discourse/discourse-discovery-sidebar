@@ -1,12 +1,10 @@
 import Component from "@glimmer/component";
-import { service } from "@ember/service";
-import { settings, themePrefix } from "virtual:theme";
+import { themePrefix } from "virtual:theme";
 import { block } from "discourse/blocks";
 import getURL from "discourse/lib/get-url";
 import dIcon from "discourse/ui-kit/helpers/d-icon";
 import { i18n } from "discourse-i18n";
 import BlockPanel from "../components/block-panel";
-import { instancesFor } from "../lib/block-instances";
 
 function isExternal(url) {
   try {
@@ -33,26 +31,21 @@ function normalizeLink(link) {
   };
 }
 
-// The resource links for the current category, from the `resources` setting:
-// the entry scoped to the category, else the unscoped default. Link fields
-// follow core's link-list block (label, url, icon, description) so the content
-// transfers to it unchanged.
+// The layout selects the resource links for the current category and passes
+// them here. Link fields follow core's link-list block (label, url, icon,
+// description) so the content transfers to it unchanged.
 @block("theme:discovery-sidebar:resources", {
   description: "A titled list of resource links",
   args: {
     title: { type: "string", required: true },
     icon: { type: "string" },
     mobile: { type: "boolean", default: false },
+    links: { type: "array", default: [] },
   },
 })
 export default class BlockResources extends Component {
-  @service discovery;
-
   get links() {
-    const entry = instancesFor(settings.resources, {
-      category: this.discovery.category,
-    })[0];
-    return (entry?.links ?? []).map(normalizeLink).filter(Boolean);
+    return (this.args.links ?? []).map(normalizeLink).filter(Boolean);
   }
 
   <template>

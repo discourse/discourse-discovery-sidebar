@@ -6,7 +6,10 @@ import getURL from "discourse/lib/get-url";
 import { i18n } from "discourse-i18n";
 import BlockPanel from "../components/block-panel";
 import CategoryMark from "../components/category-mark";
-import { rootCategory } from "../lib/block-instances";
+
+function rootCategory(category) {
+  return category?.parentCategory ?? category ?? null;
+}
 
 // The current space: the top-level category of the page and all its
 // subcategories, the current one highlighted. On global lists (Latest, Top,
