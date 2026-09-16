@@ -26,7 +26,10 @@ function normalizeLink(link) {
     label: link.label.trim(),
     description: link.description?.trim() || null,
     icon: link.icon?.trim() || null,
-    url: external ? url : getURL(url.startsWith("/") ? url : `/${url}`),
+    url:
+      /^[a-z][a-z\d+.-]*:/i.test(url) || url.startsWith("//")
+        ? url
+        : getURL(url.startsWith("/") ? url : `/${url}`),
     external,
   };
 }

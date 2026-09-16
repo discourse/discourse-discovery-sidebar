@@ -13,7 +13,7 @@ The component owns the `sidebar-discovery` block outlet. A theme that also calls
 ## Settings
 
 - **Sidebar position** — `aside` (default) puts the sidebar next to the navbar and the list, full height. `below-navbar` keeps the navbar full width and starts the sidebar next to the list.
-- **Leaderboards** — one entry per leaderboard to show. Scope an entry to categories, or leave categories empty for the fallback. No ID means the plugin's default leaderboard. The panel disappears when the request fails, so the setting is harmless without the Gamification plugin.
+- **Leaderboards** — one entry per leaderboard to show. Scope an entry to categories, or leave categories empty for the fallback. No ID means the plugin's default leaderboard. The panel disappears when the leaderboard is missing or inaccessible, so the setting is harmless without the Gamification plugin. Temporary failures show a retry button.
 - **Resources** — one entry per set of links, named for the settings list. Scope an entry to categories, or leave categories empty for the fallback.
 
 ## Styling
@@ -42,7 +42,9 @@ Themes with a fixed page width can widen it while a panel renders:
 
 ```scss
 #main-outlet-wrapper:has(.discovery-layout .block-panel) {
-  --d-max-width: calc(1000px + var(--tc-discoverySidebar-width) + var(--tc-discoverySidebar-gap));
+  --d-max-width: calc(
+    1000px + var(--tc-discoverySidebar-width) + var(--tc-discoverySidebar-gap)
+  );
 }
 ```
 

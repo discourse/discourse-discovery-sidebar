@@ -10,7 +10,7 @@ import BlockPanelSkeleton from "./block-panel-skeleton";
 // @title, @icon        header
 // @mobile              instance stays visible in the single-column layout
 // @asyncData, @context passed to DAsyncContent; @skeleton shapes the placeholder
-// <:content as |data|> body; <:empty>; <:footer>
+// <:content as |data|> body; <:empty>; <:error>; <:footer>
 const BlockPanel = <template>
   <section class="block-panel {{if @mobile '--mobile'}}" ...attributes>
     {{#if @title}}
@@ -37,6 +37,13 @@ const BlockPanel = <template>
           <:content as |data|>
             {{yield data to="content"}}
           </:content>
+          <:error as |error InlineError|>
+            {{#if (has-block "error")}}
+              {{yield error to="error"}}
+            {{else}}
+              <InlineError />
+            {{/if}}
+          </:error>
           <:empty>
             {{yield to="empty"}}
           </:empty>

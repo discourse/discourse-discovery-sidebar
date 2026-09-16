@@ -50,3 +50,5 @@ en:
     title: "Top contributors"
     view_all: "View leaderboard"
     empty: "No scores yet"
+    load_error: "Could not load the leaderboard. Please try again."
+    retry: "Retry"

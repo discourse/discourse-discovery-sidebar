@@ -6,6 +6,7 @@ import { block } from "discourse/blocks";
 import { ajax } from "discourse/lib/ajax";
 import { bind } from "discourse/lib/decorators";
 import getURL from "discourse/lib/get-url";
+import DButton from "discourse/ui-kit/d-button";
 import DUserAvatar from "discourse/ui-kit/d-user-avatar";
 import DUserLink from "discourse/ui-kit/d-user-link";
 import dNumber from "discourse/ui-kit/helpers/d-number";
@@ -33,12 +34,22 @@ import BlockPanel from "../components/block-panel";
 export default class BlockLeaderboard extends Component {
   @service siteSettings;
 
-  @tracked unavailable = false;
+  @tracked unavailablePath;
+  @tracked retryCount = 0;
 
   displayName = (user) =>
     this.siteSettings.prioritize_username_in_ux
       ? user.username
       : user.name || user.username;
+
+  get unavailable() {
+    return this.unavailablePath === this.path;
+  }
+
+  @bind
+  retry() {
+    this.retryCount++;
+  }
 
   get path() {
     const id = this.args.leaderboardId;
@@ -53,22 +64,30 @@ export default class BlockLeaderboard extends Component {
     return { rows: "user", count: this.args.count };
   }
 
-  // DAsyncContent refetches when the context object changes; the path is the
-  // context, so it reloads when the selected layout entry changes.
   get context() {
-    return { path: this.path };
+    return {
+      path: this.path,
+      count: this.args.count,
+      period: this.args.period,
+      retryCount: this.retryCount,
+    };
   }
 
   @bind
-  async fetchLeaderboard({ path }) {
+  async fetchLeaderboard({ path, count, period }) {
     try {
       const result = await ajax(path, {
-        data: { user_limit: this.args.count, period: this.args.period },
+        data: { user_limit: count, period },
       });
       return result?.users?.length ? result : null;
-    } catch {
-      this.unavailable = true;
-      return null;
+    } catch (error) {
+      if (error.jqXHR?.status === 403 || error.jqXHR?.status === 404) {
+        if (!this.isDestroying && !this.isDestroyed && path === this.path) {
+          this.unavailablePath = path;
+        }
+        return null;
+      }
+      throw error;
     }
   }
 
@@ -99,6 +118,16 @@ export default class BlockLeaderboard extends Component {
             {{/each}}
           </ol>
         </:content>
+        <:error>
+          <p class="block-leaderboard__error" role="alert">
+            {{i18n (themePrefix "leaderboard.load_error")}}
+          </p>
+          <DButton
+            @action={{this.retry}}
+            @label={{themePrefix "leaderboard.retry"}}
+            class="btn-small block-leaderboard__retry"
+          />
+        </:error>
         <:empty>
           <p class="block-leaderboard__empty">
             {{i18n (themePrefix "leaderboard.empty")}}

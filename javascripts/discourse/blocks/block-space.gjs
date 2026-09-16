@@ -66,7 +66,11 @@ export default class BlockSpace extends Component {
             class="block-space__intro
               {{if (this.isCurrent this.space) '--current'}}"
           >
-            <a class="block-space__head" href={{this.space.url}}>
+            <a
+              class="block-space__head"
+              href={{this.space.url}}
+              aria-current={{if (this.isCurrent this.space) "page"}}
+            >
               <CategoryMark @category={{this.space}} />
               <span class="block-space__name">{{this.space.name}}</span>
               {{#if @showTopicCounts}}
@@ -94,7 +98,11 @@ export default class BlockSpace extends Component {
                   class="block-space__item
                     {{if (this.isCurrent subcategory) '--current'}}"
                 >
-                  <a class="block-space__link" href={{subcategory.url}}>
+                  <a
+                    class="block-space__link"
+                    href={{subcategory.url}}
+                    aria-current={{if (this.isCurrent subcategory) "page"}}
+                  >
                     <CategoryMark @category={{subcategory}} />
                     <span class="block-space__name">{{subcategory.name}}</span>
                     {{#if @showTopicCounts}}
