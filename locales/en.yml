@@ -7,6 +7,12 @@ en:
         choices:
           aside: "Aside: full height, next to the navbar and the list"
           below-navbar: "Below navbar: navbar stays full width, sidebar starts next to the list"
+      spaces:
+        description: "Where the space panel appears. Scope an entry to categories to show it only there; an entry without categories shows it everywhere."
+        schema:
+          properties:
+            categories:
+              label: "Categories"
       leaderboards:
         description: "Which gamification leaderboard the panel shows. Scope an entry to categories for a leaderboard per space; the entry without categories applies everywhere else."
         schema:

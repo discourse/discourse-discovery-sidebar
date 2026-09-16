@@ -21,15 +21,31 @@ export default apiInitializer((api) => {
       },
       children: [
         {
-          block: BlockSpace,
+          block: BlockHead,
           id: "space",
-          args: {
-            title: "space.all_spaces",
-            icon: "compass",
-            mobile: true,
-            showDescription: true,
-            showTopicCounts: true,
-          },
+          children: [
+            ...scopedEntries(settings.spaces).map((entry) => ({
+              block: BlockSpace,
+              args: {
+                title: "space.all_spaces",
+                icon: "compass",
+                mobile: true,
+                showDescription: true,
+                showTopicCounts: true,
+              },
+              conditions: categoryScope(entry.categories),
+            })),
+            ...defaultEntries(settings.spaces).map(() => ({
+              block: BlockSpace,
+              args: {
+                title: "space.all_spaces",
+                icon: "compass",
+                mobile: true,
+                showDescription: true,
+                showTopicCounts: true,
+              },
+            })),
+          ],
         },
         {
           block: BlockHead,

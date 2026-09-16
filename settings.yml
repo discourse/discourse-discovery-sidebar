@@ -5,6 +5,20 @@ sidebar_position:
     - aside
     - below-navbar
 
+# Where the space block appears. An entry scoped to categories applies on
+# those categories and their subcategories; the unscoped entry everywhere else.
+# With no unscoped entry the block only shows on the scoped categories.
+spaces:
+  type: objects
+  default:
+    - {}
+  schema:
+    name: space
+    identifier: categories
+    properties:
+      categories:
+        type: categories
+
 # Which gamification leaderboard the leaderboard block shows. An entry scoped
 # to categories applies on those categories and their subcategories; the
 # unscoped entry everywhere else. No id means the plugin's default leaderboard.

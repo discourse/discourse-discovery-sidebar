@@ -15,7 +15,8 @@ function rootCategory(category) {
 // subcategories, the current one highlighted. On global lists (Latest, Top,
 // tags) the panel lists every top-level category instead, under @title. All
 // content comes from the route and the site's category list, so there is no
-// setting and no loading state; the args are display choices.
+// data setting and no loading state; the args are display choices. The
+// spaces setting only decides on which categories the layout renders it.
 @block("theme:discovery-sidebar:space", {
   description: "The current top-level category and its subcategories",
   args: {
