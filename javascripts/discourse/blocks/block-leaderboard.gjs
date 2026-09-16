@@ -1,4 +1,5 @@
 import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
 import { service } from "@ember/service";
 import { themePrefix } from "virtual:theme";
 import { block } from "discourse/blocks";
@@ -32,6 +33,8 @@ import BlockPanel from "../components/block-panel";
 export default class BlockLeaderboard extends Component {
   @service siteSettings;
 
+  @tracked unavailable = false;
+
   displayName = (user) =>
     this.siteSettings.prioritize_username_in_ux
       ? user.username
@@ -58,48 +61,55 @@ export default class BlockLeaderboard extends Component {
 
   @bind
   async fetchLeaderboard({ path }) {
-    const result = await ajax(path, {
-      data: { user_limit: this.args.count, period: this.args.period },
-    });
-    return result?.users?.length ? result : null;
+    try {
+      const result = await ajax(path, {
+        data: { user_limit: this.args.count, period: this.args.period },
+      });
+      return result?.users?.length ? result : null;
+    } catch {
+      this.unavailable = true;
+      return null;
+    }
   }
 
   <template>
-    <BlockPanel
-      @title={{i18n (themePrefix @title)}}
-      @icon={{@icon}}
-      @mobile={{@mobile}}
-      @asyncData={{this.fetchLeaderboard}}
-      @context={{this.context}}
-      @skeleton={{this.skeleton}}
-      class="block-leaderboard"
-    >
-      <:content as |data|>
-        <ol class="block-leaderboard__list">
-          {{#each data.users as |user|}}
-            <li class="block-leaderboard__row">
-              <span class="block-leaderboard__rank">{{user.position}}</span>
-              <DUserAvatar @user={{user}} @size="small" />
-              <DUserLink @user={{user}} class="block-leaderboard__name">
-                {{this.displayName user}}
-              </DUserLink>
-              <span class="block-leaderboard__score">
-                {{dNumber user.total_score}}
-              </span>
-            </li>
-          {{/each}}
-        </ol>
-      </:content>
-      <:empty>
-        <p class="block-leaderboard__empty">
-          {{i18n (themePrefix "leaderboard.empty")}}
-        </p>
-      </:empty>
-      <:footer>
-        <a class="block-panel__link" href={{this.leaderboardUrl}}>
-          {{i18n (themePrefix "leaderboard.view_all")}}
-        </a>
-      </:footer>
-    </BlockPanel>
+    {{#unless this.unavailable}}
+      <BlockPanel
+        @title={{i18n (themePrefix @title)}}
+        @icon={{@icon}}
+        @mobile={{@mobile}}
+        @asyncData={{this.fetchLeaderboard}}
+        @context={{this.context}}
+        @skeleton={{this.skeleton}}
+        class="block-leaderboard"
+      >
+        <:content as |data|>
+          <ol class="block-leaderboard__list">
+            {{#each data.users as |user|}}
+              <li class="block-leaderboard__row">
+                <span class="block-leaderboard__rank">{{user.position}}</span>
+                <DUserAvatar @user={{user}} @size="small" />
+                <DUserLink @user={{user}} class="block-leaderboard__name">
+                  {{this.displayName user}}
+                </DUserLink>
+                <span class="block-leaderboard__score">
+                  {{dNumber user.total_score}}
+                </span>
+              </li>
+            {{/each}}
+          </ol>
+        </:content>
+        <:empty>
+          <p class="block-leaderboard__empty">
+            {{i18n (themePrefix "leaderboard.empty")}}
+          </p>
+        </:empty>
+        <:footer>
+          <a class="block-panel__link" href={{this.leaderboardUrl}}>
+            {{i18n (themePrefix "leaderboard.view_all")}}
+          </a>
+        </:footer>
+      </BlockPanel>
+    {{/unless}}
   </template>
 }

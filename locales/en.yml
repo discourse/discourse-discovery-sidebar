@@ -20,6 +20,9 @@ en:
         description: "The links the resources panel lists. Scope an entry to categories for links per space; an entry without categories applies everywhere else."
         schema:
           properties:
+            name:
+              label: "Name"
+              description: "Only shown in this settings list."
             categories:
               label: "Categories"
             links:
