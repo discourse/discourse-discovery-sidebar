@@ -2,13 +2,19 @@
 
 A theme component that adds a configurable sidebar next to Discourse topic lists, built on the Blocks API. Works with any theme: install it as a component, then restyle it through CSS tokens.
 
-Three blocks, each driven by an `objects` theme setting. Every entry of a setting is one panel; entries scoped to categories replace the default panel on those categories.
+Three blocks. Display choices are args in the layout file: panel titles and icons, whether a panel stays on small screens, the space block's description and topic counts, the leaderboard's user count and period. Settings hold only what differs per site: which leaderboard a category shows, and which links a resource panel lists.
 
-- **Space** — on a category page, the top-level category and its subcategories; on global lists, all top-level categories.
-- **Leaderboard** — top users from the gamification plugin, per period and leaderboard id.
-- **Resources** — a list of links with icons and descriptions.
+- **Space** — on a category page, the top-level category and its subcategories; on global lists, all top-level categories. No settings.
+- **Leaderboard** — the gamification leaderboard from the `leaderboards` setting: the entry scoped to the current category, else the unscoped default.
+- **Resources** — the links from the `resources` setting: the entry scoped to the current category, else the unscoped default.
 
 The component owns the `sidebar-discovery` block outlet. A theme that also calls `api.renderBlocks("sidebar-discovery", …)` must drop that call.
+
+## Settings
+
+- **Sidebar position** — `aside` (default) puts the sidebar next to the navbar and the list, full height. `below-navbar` keeps the navbar full width and starts the sidebar next to the list.
+- **Leaderboards** — one entry per leaderboard to show. Scope an entry to categories, or leave categories empty for the fallback. No ID means the plugin's default leaderboard. The panel disappears when the request fails, so the setting is harmless without the Gamification plugin.
+- **Resources** — one entry per set of links, named for the settings list. Scope an entry to categories, or leave categories empty for the fallback.
 
 ## Styling
 

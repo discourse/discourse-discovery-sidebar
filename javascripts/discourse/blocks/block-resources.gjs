@@ -1,11 +1,10 @@
 import Component from "@glimmer/component";
-import { service } from "@ember/service";
-import { settings } from "virtual:theme";
+import { themePrefix } from "virtual:theme";
 import { block } from "discourse/blocks";
 import getURL from "discourse/lib/get-url";
 import dIcon from "discourse/ui-kit/helpers/d-icon";
+import { i18n } from "discourse-i18n";
 import BlockPanel from "../components/block-panel";
-import { instancesFor } from "../lib/block-instances";
 
 function isExternal(url) {
   try {
@@ -32,40 +31,34 @@ function normalizeLink(link) {
   };
 }
 
-// A list of links per instance. Link fields follow core's link-list block
-// (label, url, icon, description) so the content transfers to it unchanged.
+// The layout selects the resource links for the current category and passes
+// them here. Link fields follow core's link-list block (label, url, icon,
+// description) so the content transfers to it unchanged.
 @block("theme:discovery-sidebar:resources", {
   description: "A titled list of resource links",
   args: {
-    placement: { type: "string", enum: ["discovery-sidebar"], required: true },
+    title: { type: "string", required: true },
+    icon: { type: "string" },
+    mobile: { type: "boolean", default: false },
+    links: { type: "array", default: [] },
   },
 })
 export default class BlockResources extends Component {
-  @service discovery;
-
-  get instances() {
-    return instancesFor(settings.resources, {
-      placement: this.args.placement,
-      category: this.discovery.category,
-    })
-      .map((instance) => ({
-        ...instance,
-        links: (instance.links ?? []).map(normalizeLink).filter(Boolean),
-      }))
-      .filter((instance) => instance.links.length > 0);
+  get links() {
+    return (this.args.links ?? []).map(normalizeLink).filter(Boolean);
   }
 
   <template>
-    {{#each this.instances key="title" as |instance|}}
+    {{#if this.links.length}}
       <BlockPanel
-        @title={{instance.title}}
-        @icon={{instance.title_icon}}
-        @mobile={{instance.mobile}}
+        @title={{i18n (themePrefix @title)}}
+        @icon={{@icon}}
+        @mobile={{@mobile}}
         class="block-resources"
       >
         <:content>
           <ul class="block-resources__list">
-            {{#each instance.links as |link|}}
+            {{#each this.links as |link|}}
               <li class="block-resources__item">
                 <a
                   class="block-resources__link"
@@ -92,6 +85,6 @@ export default class BlockResources extends Component {
           </ul>
         </:content>
       </BlockPanel>
-    {{/each}}
+    {{/if}}
   </template>
 }

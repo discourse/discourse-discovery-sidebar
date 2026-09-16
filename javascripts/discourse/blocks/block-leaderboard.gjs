@@ -1,6 +1,7 @@
 import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
 import { service } from "@ember/service";
-import { settings, themePrefix } from "virtual:theme";
+import { themePrefix } from "virtual:theme";
 import { block } from "discourse/blocks";
 import { ajax } from "discourse/lib/ajax";
 import { bind } from "discourse/lib/decorators";
@@ -10,64 +11,76 @@ import DUserLink from "discourse/ui-kit/d-user-link";
 import dNumber from "discourse/ui-kit/helpers/d-number";
 import { i18n } from "discourse-i18n";
 import BlockPanel from "../components/block-panel";
-import { instancesFor } from "../lib/block-instances";
 
-// A gamification leaderboard per instance. Arg names follow the gamification
-// plugin's block on core's wireframe branch (leaderboardId, count, period).
+// The layout selects the leaderboard for the current category and passes its
+// id here. A missing id deliberately uses the Gamification plugin's default.
+// Arg names follow its core block (leaderboardId, count, period).
 @block("theme:discovery-sidebar:leaderboard", {
   description: "Top users of a gamification leaderboard",
   args: {
-    placement: { type: "string", enum: ["discovery-sidebar"], required: true },
+    title: { type: "string", required: true },
+    icon: { type: "string" },
+    mobile: { type: "boolean", default: false },
+    leaderboardId: { type: "number", integer: true, min: 1 },
+    count: { type: "number", default: 5 },
+    period: {
+      type: "string",
+      default: "monthly",
+      enum: ["all_time", "yearly", "quarterly", "monthly", "weekly", "daily"],
+    },
   },
 })
 export default class BlockLeaderboard extends Component {
-  @service discovery;
   @service siteSettings;
 
-  leaderboardUrl = (instance, data) => {
-    const id = instance.leaderboard_id || data?.leaderboard?.id;
-    return getURL(id ? `/leaderboard/${id}` : "/leaderboard");
-  };
-
-  skeletonFor = (instance) => ({ rows: "user", count: instance.count ?? 5 });
+  @tracked unavailable = false;
 
   displayName = (user) =>
     this.siteSettings.prioritize_username_in_ux
       ? user.username
       : user.name || user.username;
 
-  get instances() {
-    return instancesFor(settings.leaderboard, {
-      placement: this.args.placement,
-      category: this.discovery.category,
-    });
+  get path() {
+    const id = this.args.leaderboardId;
+    return id ? `/leaderboard/${id}` : "/leaderboard";
   }
 
-  // DAsyncContent refetches when the context object changes; the instance is
-  // the context, so each panel loads its own leaderboard.
+  get leaderboardUrl() {
+    return getURL(this.path);
+  }
+
+  get skeleton() {
+    return { rows: "user", count: this.args.count };
+  }
+
+  // DAsyncContent refetches when the context object changes; the path is the
+  // context, so it reloads when the selected layout entry changes.
+  get context() {
+    return { path: this.path };
+  }
+
   @bind
-  async fetchLeaderboard(instance) {
-    const path = instance.leaderboard_id
-      ? `/leaderboard/${instance.leaderboard_id}`
-      : "/leaderboard";
-    const result = await ajax(path, {
-      data: {
-        user_limit: instance.count ?? 5,
-        period: instance.period ?? "monthly",
-      },
-    });
-    return result?.users?.length ? result : null;
+  async fetchLeaderboard({ path }) {
+    try {
+      const result = await ajax(path, {
+        data: { user_limit: this.args.count, period: this.args.period },
+      });
+      return result?.users?.length ? result : null;
+    } catch {
+      this.unavailable = true;
+      return null;
+    }
   }
 
   <template>
-    {{#each this.instances key="title" as |instance|}}
+    {{#unless this.unavailable}}
       <BlockPanel
-        @title={{instance.title}}
-        @icon={{instance.title_icon}}
-        @mobile={{instance.mobile}}
+        @title={{i18n (themePrefix @title)}}
+        @icon={{@icon}}
+        @mobile={{@mobile}}
         @asyncData={{this.fetchLeaderboard}}
-        @context={{instance}}
-        @skeleton={{this.skeletonFor instance}}
+        @context={{this.context}}
+        @skeleton={{this.skeleton}}
         class="block-leaderboard"
       >
         <:content as |data|>
@@ -92,12 +105,11 @@ export default class BlockLeaderboard extends Component {
           </p>
         </:empty>
         <:footer>
-          <a
-            class="block-panel__link"
-            href={{this.leaderboardUrl instance}}
-          >{{i18n (themePrefix "leaderboard.view_all")}}</a>
+          <a class="block-panel__link" href={{this.leaderboardUrl}}>
+            {{i18n (themePrefix "leaderboard.view_all")}}
+          </a>
         </:footer>
       </BlockPanel>
-    {{/each}}
+    {{/unless}}
   </template>
 }

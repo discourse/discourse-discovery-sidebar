@@ -14,7 +14,7 @@ export default class BlockPanelSkeleton extends Component {
   }
 
   <template>
-    <div class="block-panel-skeleton" aria-busy="true" aria-hidden="true">
+    <div class="block-panel-skeleton" aria-hidden="true">
       {{#if (eq @shape.rows "user")}}
         {{#each this.rows as |row|}}
           <div class="block-panel-skeleton__row --user" data-row={{row}}>
