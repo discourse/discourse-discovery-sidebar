@@ -7,7 +7,7 @@ Five blocks. Display choices are args in the layout file: panel titles and icons
 - **Space** — on a category page, the top-level category and its subcategories; on global lists, all top-level categories. The `spaces` setting decides where it appears.
 - **Events** — upcoming post events from the `events` setting: the events category of the matching entry, else the whole site. Falls back to the most recent past events. Needs the Events plugin; the panel disappears without it.
 - **Topics** — a compact topic list of the current space, or of the whole site on global lists. The `topic_lists` setting picks the list (latest, hot or top), the period for top, and optionally a tag. Pinned topics are left out.
-- **Leaderboard** — the gamification leaderboard from the `leaderboards` setting: the entry scoped to the current category, else the unscoped default.
+- **Leaderboard** — the gamification leaderboard from the `leaderboards` setting: the entry scoped to the current category, else the unscoped default. The panel takes its title and period from the leaderboard itself unless the layout passes a `title` or `period` arg.
 - **Resources** — the links from the `resources` setting: the entry scoped to the current category, else the unscoped default.
 
 The component owns the `sidebar-discovery` block outlet. A theme that also calls `api.renderBlocks("sidebar-discovery", …)` must drop that call.

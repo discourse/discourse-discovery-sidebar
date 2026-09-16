@@ -92,6 +92,5 @@ en:
   resources:
     title: "Resources"
   leaderboard:
-    title: "Top contributors"
     view_all: "View leaderboard"
     empty: "No scores yet"

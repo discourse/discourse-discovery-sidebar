@@ -14,18 +14,19 @@ import BlockPanel from "../components/block-panel";
 
 // The layout selects the leaderboard for the current category and passes its
 // id here. A missing id deliberately uses the Gamification plugin's default.
-// Arg names follow its core block (leaderboardId, count, period).
+// Arg names follow its core block (leaderboardId, count, period). Without a
+// title the panel shows the leaderboard's own name; without a period the
+// server ranks over the leaderboard's default period.
 @block("theme:discovery-sidebar:leaderboard", {
   description: "Top users of a gamification leaderboard",
   args: {
-    title: { type: "string", required: true },
+    title: { type: "string" },
     icon: { type: "string" },
     mobile: { type: "boolean", default: false },
     leaderboardId: { type: "number", integer: true, min: 1 },
     count: { type: "number", default: 5 },
     period: {
       type: "string",
-      default: "monthly",
       enum: ["all_time", "yearly", "quarterly", "monthly", "weekly", "daily"],
     },
   },
@@ -34,6 +35,7 @@ export default class BlockLeaderboard extends Component {
   @service siteSettings;
 
   @tracked unavailablePath;
+  @tracked leaderboardName;
   @tracked retryCount = 0;
 
   displayName = (user) =>
@@ -43,6 +45,12 @@ export default class BlockLeaderboard extends Component {
 
   get unavailable() {
     return this.unavailablePath === this.path;
+  }
+
+  get title() {
+    return this.args.title
+      ? i18n(themePrefix(this.args.title))
+      : this.leaderboardName;
   }
 
   @bind
@@ -75,9 +83,14 @@ export default class BlockLeaderboard extends Component {
   @bind
   async fetchLeaderboard({ path, count, period }) {
     try {
-      const result = await ajax(path, {
-        data: { user_limit: count, period },
-      });
+      const data = { user_limit: count };
+      if (period) {
+        data.period = period;
+      }
+      const result = await ajax(path, { data });
+      if (!this.isDestroying && !this.isDestroyed && path === this.path) {
+        this.leaderboardName = result?.leaderboard?.name;
+      }
       return result?.users?.length ? result : null;
     } catch (error) {
       if (error.jqXHR?.status === 403 || error.jqXHR?.status === 404) {
@@ -93,7 +106,7 @@ export default class BlockLeaderboard extends Component {
   <template>
     {{#unless this.unavailable}}
       <BlockPanel
-        @title={{i18n (themePrefix @title)}}
+        @title={{this.title}}
         @icon={{@icon}}
         @mobile={{@mobile}}
         @asyncData={{this.fetchLeaderboard}}

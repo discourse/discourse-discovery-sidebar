@@ -120,11 +120,9 @@ export default apiInitializer((api) => {
             ...scopedEntries(settings.leaderboards).map((entry) => ({
               block: BlockLeaderboard,
               args: {
-                title: "leaderboard.title",
                 icon: "trophy",
                 mobile: false,
                 count: 5,
-                period: "monthly",
                 leaderboardId: entry.leaderboard_id,
               },
               conditions: categoryScope(entry.categories),
@@ -132,11 +130,9 @@ export default apiInitializer((api) => {
             ...defaultEntries(settings.leaderboards).map((entry) => ({
               block: BlockLeaderboard,
               args: {
-                title: "leaderboard.title",
                 icon: "trophy",
                 mobile: false,
                 count: 5,
-                period: "monthly",
                 leaderboardId: entry.leaderboard_id,
               },
             })),
