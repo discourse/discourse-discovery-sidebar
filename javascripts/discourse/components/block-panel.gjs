@@ -1,5 +1,8 @@
+import { themePrefix } from "virtual:theme";
 import DAsyncContent from "discourse/ui-kit/d-async-content";
+import DButton from "discourse/ui-kit/d-button";
 import dIcon from "discourse/ui-kit/helpers/d-icon";
+import { i18n } from "discourse-i18n";
 import BlockPanelSkeleton from "./block-panel-skeleton";
 
 // Chrome shared by every sidebar panel: header, body, footer. The header and
@@ -10,6 +13,7 @@ import BlockPanelSkeleton from "./block-panel-skeleton";
 // @title, @icon        header
 // @mobile              instance stays visible in the single-column layout
 // @asyncData, @context passed to DAsyncContent; @skeleton shapes the placeholder
+// @onRetry             a failed load shows a message and a retry button
 // <:content as |data|> body; <:empty>; <:error>; <:footer>
 const BlockPanel = <template>
   <section class="block-panel {{if @mobile '--mobile'}}" ...attributes>
@@ -40,6 +44,15 @@ const BlockPanel = <template>
           <:error as |error InlineError|>
             {{#if (has-block "error")}}
               {{yield error to="error"}}
+            {{else if @onRetry}}
+              <p class="block-panel__error" role="alert">
+                {{i18n (themePrefix "panel.load_error")}}
+              </p>
+              <DButton
+                @action={{@onRetry}}
+                @label={{themePrefix "panel.retry"}}
+                class="btn-small block-panel__retry"
+              />
             {{else}}
               <InlineError />
             {{/if}}

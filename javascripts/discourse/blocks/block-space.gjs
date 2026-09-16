@@ -6,17 +6,15 @@ import getURL from "discourse/lib/get-url";
 import { i18n } from "discourse-i18n";
 import BlockPanel from "../components/block-panel";
 import CategoryMark from "../components/category-mark";
-
-function rootCategory(category) {
-  return category?.parentCategory ?? category ?? null;
-}
+import { spaceOf } from "../lib/space";
 
 // The current space: the top-level category of the page and all its
 // subcategories, the current one highlighted. On global lists (Latest, Top,
 // tags) the panel lists every top-level category instead, under @title. All
 // content comes from the route and the site's category list, so there is no
 // data setting and no loading state; the args are display choices. The
-// spaces setting only decides on which categories the layout renders it.
+// spaces setting decides on which categories the layout renders it and where
+// its "All spaces" link goes.
 @block("theme:discovery-sidebar:space", {
   description: "The current top-level category and its subcategories",
   args: {
@@ -25,6 +23,11 @@ function rootCategory(category) {
     mobile: { type: "boolean", default: false },
     showDescription: { type: "boolean", default: true },
     showTopicCounts: { type: "boolean", default: true },
+    allSpacesUrl: {
+      type: "string",
+      default: "/",
+      enum: ["/", "/latest", "/categories"],
+    },
   },
 })
 export default class BlockSpace extends Component {
@@ -33,8 +36,8 @@ export default class BlockSpace extends Component {
 
   isCurrent = (category) => category.id === this.category?.id;
 
-  get homeUrl() {
-    return getURL("/");
+  get allSpacesUrl() {
+    return getURL(this.args.allSpacesUrl ?? "/");
   }
 
   get category() {
@@ -42,7 +45,7 @@ export default class BlockSpace extends Component {
   }
 
   get space() {
-    return rootCategory(this.category);
+    return spaceOf(this.category);
   }
 
   get subcategories() {
@@ -121,7 +124,7 @@ export default class BlockSpace extends Component {
           {{/if}}
         </:content>
         <:footer>
-          <a class="block-panel__link" href={{this.homeUrl}}>
+          <a class="block-panel__link" href={{this.allSpacesUrl}}>
             {{i18n (themePrefix "space.all_spaces_link")}}
           </a>
         </:footer>

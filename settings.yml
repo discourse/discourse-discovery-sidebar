@@ -5,19 +5,82 @@ sidebar_position:
     - aside
     - below-navbar
 
-# Where the space block appears. An entry scoped to categories applies on
-# those categories and their subcategories; the unscoped entry everywhere else.
-# With no unscoped entry the block only shows on the scoped categories.
+# Where the space block appears and where its "All spaces" link goes. An entry
+# scoped to categories applies on those categories and their subcategories;
+# the unscoped entry everywhere else. With no unscoped entry the block only
+# shows on the scoped categories.
 spaces:
   type: objects
   default:
-    - {}
+    - all_spaces_url: "/"
   schema:
     name: space
     identifier: categories
     properties:
       categories:
         type: categories
+      all_spaces_url:
+        type: enum
+        default: "/"
+        choices:
+          - "/"
+          - "/latest"
+          - "/categories"
+
+# Where the events block appears and which category its events come from. An
+# entry scoped to categories applies on those categories and their
+# subcategories; the unscoped entry everywhere else. No events category means
+# the whole site.
+events:
+  type: objects
+  default:
+    - {}
+  schema:
+    name: events
+    identifier: categories
+    properties:
+      categories:
+        type: categories
+      events_category:
+        type: categories
+        validations:
+          max: 1
+
+# Which topics the topics block lists for a space. An entry scoped to
+# categories applies on those categories and their subcategories; the unscoped
+# entry everywhere else. The period only applies to the top list; a tag
+# narrows the list to topics carrying it.
+topic_lists:
+  type: objects
+  default:
+    - list: hot
+  schema:
+    name: topic_list
+    identifier: categories
+    properties:
+      categories:
+        type: categories
+      list:
+        type: enum
+        default: hot
+        choices:
+          - latest
+          - hot
+          - top
+      period:
+        type: enum
+        default: monthly
+        choices:
+          - all
+          - yearly
+          - quarterly
+          - monthly
+          - weekly
+          - daily
+      tag:
+        type: tags
+        validations:
+          max: 1
 
 # Which gamification leaderboard the leaderboard block shows. An entry scoped
 # to categories applies on those categories and their subcategories; the

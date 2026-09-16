@@ -10,6 +10,6 @@
   "maximum_discourse_version": null,
   "assets": {},
   "modifiers": {
-    "svg_icons": ["trophy", "book", "compass"]
+    "svg_icons": ["trophy", "book", "compass", "calendar", "comments"]
   }
 }

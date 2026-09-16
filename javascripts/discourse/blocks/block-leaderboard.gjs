@@ -6,7 +6,6 @@ import { block } from "discourse/blocks";
 import { ajax } from "discourse/lib/ajax";
 import { bind } from "discourse/lib/decorators";
 import getURL from "discourse/lib/get-url";
-import DButton from "discourse/ui-kit/d-button";
 import DUserAvatar from "discourse/ui-kit/d-user-avatar";
 import DUserLink from "discourse/ui-kit/d-user-link";
 import dNumber from "discourse/ui-kit/helpers/d-number";
@@ -100,6 +99,7 @@ export default class BlockLeaderboard extends Component {
         @asyncData={{this.fetchLeaderboard}}
         @context={{this.context}}
         @skeleton={{this.skeleton}}
+        @onRetry={{this.retry}}
         class="block-leaderboard"
       >
         <:content as |data|>
@@ -118,16 +118,6 @@ export default class BlockLeaderboard extends Component {
             {{/each}}
           </ol>
         </:content>
-        <:error>
-          <p class="block-leaderboard__error" role="alert">
-            {{i18n (themePrefix "leaderboard.load_error")}}
-          </p>
-          <DButton
-            @action={{this.retry}}
-            @label={{themePrefix "leaderboard.retry"}}
-            class="btn-small block-leaderboard__retry"
-          />
-        </:error>
         <:empty>
           <p class="block-leaderboard__empty">
             {{i18n (themePrefix "leaderboard.empty")}}

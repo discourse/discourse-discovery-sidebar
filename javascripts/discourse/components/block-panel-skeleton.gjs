@@ -7,6 +7,8 @@ import DSkeleton from "discourse/ui-kit/d-skeleton";
 // composed rows that plain DSkeleton cannot express:
 //   { rows: "user", count }  avatar circle + name line + score
 //   { rows: "link", count }  icon square + label line + description line
+//   { rows: "topic", count } title line + meta line
+//   { rows: "event", count } date badge + title line
 export default class BlockPanelSkeleton extends Component {
   get rows() {
     const count = this.args.shape?.count ?? 5;
@@ -31,6 +33,22 @@ export default class BlockPanelSkeleton extends Component {
               <DSkeleton @variant="text" @width="60%" />
               <DSkeleton @variant="text" @width="85%" />
             </div>
+          </div>
+        {{/each}}
+      {{else if (eq @shape.rows "topic")}}
+        {{#each this.rows as |row|}}
+          <div class="block-panel-skeleton__row --topic" data-row={{row}}>
+            <div class="block-panel-skeleton__lines">
+              <DSkeleton @variant="text" @width="90%" />
+              <DSkeleton @variant="text" @width="40%" />
+            </div>
+          </div>
+        {{/each}}
+      {{else if (eq @shape.rows "event")}}
+        {{#each this.rows as |row|}}
+          <div class="block-panel-skeleton__row --event" data-row={{row}}>
+            <DSkeleton @variant="rect" @width="2.75rem" @height="2.5rem" />
+            <DSkeleton @variant="text" @width="70%" />
           </div>
         {{/each}}
       {{else}}

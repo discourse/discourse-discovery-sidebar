@@ -8,11 +8,38 @@ en:
           aside: "Aside: full height, next to the navbar and the list"
           below-navbar: "Below navbar: navbar stays full width, sidebar starts next to the list"
       spaces:
-        description: "Where the space panel appears. Scope an entry to categories to show it only there; an entry without categories shows it everywhere."
+        description: "Where the space panel appears and where its “All spaces” link goes. Scope an entry to categories to show it only there; an entry without categories shows it everywhere."
         schema:
           properties:
             categories:
               label: "Categories"
+            all_spaces_url:
+              label: "All spaces link"
+              description: "The page the panel’s “All spaces” link opens."
+      events:
+        description: "Where the events panel appears and where its events come from. Scope an entry to categories for events per space; an entry without categories applies everywhere else."
+        schema:
+          properties:
+            categories:
+              label: "Categories"
+            events_category:
+              label: "Events category"
+              description: "Leave empty for the events of the whole site."
+      topic_lists:
+        description: "Which topics the topics panel lists. Scope an entry to categories for a list per space; an entry without categories applies everywhere else."
+        schema:
+          properties:
+            categories:
+              label: "Categories"
+            list:
+              label: "List"
+              description: "Topics of the current space, or of the whole site on global lists."
+            period:
+              label: "Period"
+              description: "Only applies to the top list."
+            tag:
+              label: "Tag"
+              description: "Only topics with this tag."
       leaderboards:
         description: "Which gamification leaderboard the panel shows. Scope an entry to categories for a leaderboard per space; the entry without categories applies everywhere else."
         schema:
@@ -50,11 +77,21 @@ en:
     topic_count:
       one: "%{count} topic"
       other: "%{count} topics"
+  panel:
+    load_error: "Could not load this content. Please try again."
+    retry: "Retry"
+  events:
+    title: "Upcoming events"
+    recent: "Recent events"
+    empty: "No upcoming events"
+    view_all: "All events"
+  topics:
+    title: "Featured topics"
+    empty: "No topics yet"
+    view_all: "View all"
   resources:
     title: "Resources"
   leaderboard:
     title: "Top contributors"
     view_all: "View leaderboard"
     empty: "No scores yet"
-    load_error: "Could not load the leaderboard. Please try again."
-    retry: "Retry"

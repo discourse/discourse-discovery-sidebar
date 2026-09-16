@@ -13,6 +13,14 @@
     }
   }
 
+  &__row.--event {
+    gap: var(--space-3);
+  }
+
+  &__row.--topic {
+    align-items: stretch;
+  }
+
   &__lines {
     display: flex;
     flex: 1;

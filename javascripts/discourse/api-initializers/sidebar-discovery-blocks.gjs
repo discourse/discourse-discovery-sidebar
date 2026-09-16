@@ -2,9 +2,11 @@ import { settings } from "virtual:theme";
 import BlockGroup from "discourse/blocks/builtin/block-group";
 import BlockHead from "discourse/blocks/builtin/block-head";
 import { apiInitializer } from "discourse/lib/api";
+import BlockEvents from "../blocks/block-events";
 import BlockLeaderboard from "../blocks/block-leaderboard";
 import BlockResources from "../blocks/block-resources";
 import BlockSpace from "../blocks/block-space";
+import BlockTopics from "../blocks/block-topics";
 import {
   categoryScope,
   defaultEntries,
@@ -32,10 +34,11 @@ export default apiInitializer((api) => {
                 mobile: true,
                 showDescription: true,
                 showTopicCounts: true,
+                allSpacesUrl: entry.all_spaces_url,
               },
               conditions: categoryScope(entry.categories),
             })),
-            ...defaultEntries(settings.spaces).map(() => ({
+            ...defaultEntries(settings.spaces).map((entry) => ({
               block: BlockSpace,
               args: {
                 title: "space.all_spaces",
@@ -43,6 +46,69 @@ export default apiInitializer((api) => {
                 mobile: true,
                 showDescription: true,
                 showTopicCounts: true,
+                allSpacesUrl: entry.all_spaces_url,
+              },
+            })),
+          ],
+        },
+        {
+          block: BlockHead,
+          id: "events",
+          children: [
+            ...scopedEntries(settings.events).map((entry) => ({
+              block: BlockEvents,
+              args: {
+                title: "events.title",
+                recentTitle: "events.recent",
+                icon: "calendar",
+                mobile: false,
+                count: 3,
+                categoryId: entry.events_category?.[0],
+              },
+              conditions: categoryScope(entry.categories),
+            })),
+            ...defaultEntries(settings.events).map((entry) => ({
+              block: BlockEvents,
+              args: {
+                title: "events.title",
+                recentTitle: "events.recent",
+                icon: "calendar",
+                mobile: false,
+                count: 3,
+                categoryId: entry.events_category?.[0],
+              },
+            })),
+          ],
+        },
+        {
+          block: BlockHead,
+          id: "topics",
+          children: [
+            ...scopedEntries(settings.topic_lists).map((entry) => ({
+              block: BlockTopics,
+              args: {
+                title: "topics.title",
+                icon: "comments",
+                mobile: false,
+                count: 5,
+                showCategory: true,
+                list: entry.list,
+                period: entry.period,
+                tag: entry.tag?.[0],
+              },
+              conditions: categoryScope(entry.categories),
+            })),
+            ...defaultEntries(settings.topic_lists).map((entry) => ({
+              block: BlockTopics,
+              args: {
+                title: "topics.title",
+                icon: "comments",
+                mobile: false,
+                count: 5,
+                showCategory: true,
+                list: entry.list,
+                period: entry.period,
+                tag: entry.tag?.[0],
               },
             })),
           ],
