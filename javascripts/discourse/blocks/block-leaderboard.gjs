@@ -24,7 +24,7 @@ import BlockPanel from "../components/block-panel";
     icon: { type: "string" },
     mobile: { type: "boolean", default: false },
     leaderboardId: { type: "number", integer: true, min: 1 },
-    count: { type: "number", default: 5 },
+    count: { type: "number", default: 8 },
     period: {
       type: "string",
       enum: ["all_time", "yearly", "quarterly", "monthly", "weekly", "daily"],

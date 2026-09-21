@@ -122,7 +122,7 @@ export default apiInitializer((api) => {
               args: {
                 icon: "trophy",
                 mobile: false,
-                count: 5,
+                count: 8,
                 leaderboardId: entry.leaderboard_id,
               },
               conditions: categoryScope(entry.categories),
@@ -132,7 +132,7 @@ export default apiInitializer((api) => {
               args: {
                 icon: "trophy",
                 mobile: false,
-                count: 5,
+                count: 8,
                 leaderboardId: entry.leaderboard_id,
               },
             })),
