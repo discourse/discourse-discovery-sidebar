@@ -90,9 +90,11 @@
     gap: var(--tc-discoverySidebar-panel-gap);
   }
 
-  // core keeps a wrapper per block even when the block renders no panel
-  // (no matching instance); an empty flex item would still take a gap
-  &__block:not(:has(.block-panel)) {
+  // core keeps a wrapper per block, and a container wrapper per head or
+  // group, even when nothing inside renders a panel (no matching instance,
+  // or a block hiding itself); an empty flex item would still take a gap
+  &__block:not(:has(.block-panel)),
+  &__block-container:not(:has(.block-panel)) {
     display: none;
   }
 }

@@ -52,10 +52,4 @@
   &__link:focus-visible .block-events__name {
     text-decoration: underline;
   }
-
-  &__empty {
-    margin: 0;
-    color: var(--tc-discoverySidebar-panel-muted);
-    font-size: var(--tc-discoverySidebar-panel-meta-size);
-  }
 }

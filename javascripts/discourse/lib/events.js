@@ -37,7 +37,7 @@ function serialize([event, occurrence]) {
 // Post events of the whole site, or of a category and its subcategories
 // when one is given. The next `count` upcoming events; when there are none,
 // the `count` most recent past events instead, flagged with `recent`. Null
-// when there are no events at all, so the panel shows its empty state.
+// when there are no events at all, so the panel hides itself.
 export async function fetchEvents({ categoryId, count }) {
   const result = await ajax("/discourse-post-event/events.json", {
     data: {

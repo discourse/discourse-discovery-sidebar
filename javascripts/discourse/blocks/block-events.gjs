@@ -4,13 +4,19 @@ import { themePrefix } from "virtual:theme";
 import { block } from "discourse/blocks";
 import { bind } from "discourse/lib/decorators";
 import getURL from "discourse/lib/get-url";
+import DAsyncContent from "discourse/ui-kit/d-async-content";
 import { i18n } from "discourse-i18n";
 import BlockPanel from "../components/block-panel";
+import BlockPanelError from "../components/block-panel-error";
 import { fetchEvents } from "../lib/events";
 
 // The layout selects the events entry for the current category and passes
 // its events category here. Without one the events come from the whole
-// site. The panel disappears for good when the events plugin is missing.
+// site. With no upcoming events it shows the most recent past ones under
+// @recentTitle. The data loads before the panel exists: nothing renders
+// while loading or when there are no events at all, so an empty panel never
+// flashes, and the panel disappears for good when the events plugin is
+// missing.
 @block("theme:discovery-sidebar:events", {
   description: "Upcoming post events of a category",
   args: {
@@ -24,26 +30,18 @@ import { fetchEvents } from "../lib/events";
 })
 export default class BlockEvents extends Component {
   @tracked unavailable = false;
-  @tracked recent = false;
   @tracked retryCount = 0;
+
+  titleFor = (data) =>
+    i18n(themePrefix(data.recent ? this.args.recentTitle : this.args.title));
 
   @bind
   retry() {
     this.retryCount++;
   }
 
-  get title() {
-    return i18n(
-      themePrefix(this.recent ? this.args.recentTitle : this.args.title)
-    );
-  }
-
   get eventsUrl() {
     return getURL("/upcoming-events");
-  }
-
-  get skeleton() {
-    return { rows: "event", count: this.args.count };
   }
 
   get context() {
@@ -57,11 +55,7 @@ export default class BlockEvents extends Component {
   @bind
   async fetchEvents({ categoryId, count }) {
     try {
-      const result = await fetchEvents({ categoryId, count });
-      if (!this.isDestroying && !this.isDestroyed) {
-        this.recent = !!result?.recent;
-      }
-      return result;
+      return await fetchEvents({ categoryId, count });
     } catch (error) {
       if (error.jqXHR?.status === 403 || error.jqXHR?.status === 404) {
         if (!this.isDestroying && !this.isDestroyed) {
@@ -75,42 +69,55 @@ export default class BlockEvents extends Component {
 
   <template>
     {{#unless this.unavailable}}
-      <BlockPanel
-        @title={{this.title}}
-        @icon={{@icon}}
-        @mobile={{@mobile}}
+      <DAsyncContent
         @asyncData={{this.fetchEvents}}
         @context={{this.context}}
-        @skeleton={{this.skeleton}}
-        @onRetry={{this.retry}}
-        class="block-events"
+        @retainWhileReloading={{true}}
       >
+        <:loading></:loading>
+        <:empty></:empty>
         <:content as |data|>
-          <ol class="block-events__list">
-            {{#each data.events as |event|}}
-              <li class="block-events__row">
-                <a class="block-events__link" href={{event.url}}>
-                  <time class="block-events__date" datetime={{event.iso}}>
-                    <span class="block-events__month">{{event.month}}</span>
-                    <span class="block-events__day">{{event.day}}</span>
-                  </time>
-                  <span class="block-events__name">{{event.title}}</span>
-                </a>
-              </li>
-            {{/each}}
-          </ol>
+          <BlockPanel
+            @title={{this.titleFor data}}
+            @icon={{@icon}}
+            @mobile={{@mobile}}
+            class="block-events"
+          >
+            <:content>
+              <ol class="block-events__list">
+                {{#each data.events as |event|}}
+                  <li class="block-events__row">
+                    <a class="block-events__link" href={{event.url}}>
+                      <time class="block-events__date" datetime={{event.iso}}>
+                        <span class="block-events__month">{{event.month}}</span>
+                        <span class="block-events__day">{{event.day}}</span>
+                      </time>
+                      <span class="block-events__name">{{event.title}}</span>
+                    </a>
+                  </li>
+                {{/each}}
+              </ol>
+            </:content>
+            <:footer>
+              <a class="block-panel__link" href={{this.eventsUrl}}>
+                {{i18n (themePrefix "events.view_all")}}
+              </a>
+            </:footer>
+          </BlockPanel>
         </:content>
-        <:empty>
-          <p class="block-events__empty">
-            {{i18n (themePrefix "events.empty")}}
-          </p>
-        </:empty>
-        <:footer>
-          <a class="block-panel__link" href={{this.eventsUrl}}>
-            {{i18n (themePrefix "events.view_all")}}
-          </a>
-        </:footer>
-      </BlockPanel>
+        <:error>
+          <BlockPanel
+            @title={{i18n (themePrefix @title)}}
+            @icon={{@icon}}
+            @mobile={{@mobile}}
+            class="block-events"
+          >
+            <:content>
+              <BlockPanelError @onRetry={{this.retry}} />
+            </:content>
+          </BlockPanel>
+        </:error>
+      </DAsyncContent>
     {{/unless}}
   </template>
 }

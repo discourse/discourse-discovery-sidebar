@@ -80,7 +80,6 @@ en:
   events:
     title: "Upcoming events"
     recent: "Recent events"
-    empty: "No upcoming events"
     view_all: "All events"
   topics:
     title: "Featured topics"
