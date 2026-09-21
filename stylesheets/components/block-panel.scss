@@ -25,11 +25,6 @@
     @include block-panel-footer;
   }
 
-  &__error {
-    margin: 0 0 var(--space-2);
-    font-size: var(--tc-discoverySidebar-panel-meta-size);
-  }
-
   &__link {
     color: var(--tc-discoverySidebar-panel-accent);
     font-size: var(--tc-discoverySidebar-panel-meta-size);
