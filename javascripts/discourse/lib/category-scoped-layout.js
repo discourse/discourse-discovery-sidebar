@@ -21,3 +21,16 @@ export function defaultEntries(entries) {
   const entry = (entries ?? []).find((item) => !item.categories?.length);
   return entry ? [entry] : [];
 }
+
+// Core rejects a container without children, so a head whose block has no
+// setting entries, or the group when every block is empty, is dropped from
+// the layout before registration.
+export function withoutEmptyContainers(entries) {
+  return entries.flatMap((entry) => {
+    if (!entry.children) {
+      return [entry];
+    }
+    const children = withoutEmptyContainers(entry.children);
+    return children.length ? [{ ...entry, children }] : [];
+  });
+}

@@ -14,6 +14,8 @@ The component owns the `sidebar-discovery` block outlet. A theme that also calls
 
 ## Settings
 
+Every panel is driven by one setting with one entry per place it appears. Remove all entries of a setting to turn that panel off.
+
 - **Sidebar position** — `aside` (default) puts the sidebar next to the navbar and the list, full height. `below-navbar` keeps the navbar full width and starts the sidebar next to the list.
 - **Spaces** — one entry per place the space panel appears. Scope an entry to categories, or leave categories empty to show it everywhere. Remove the unscoped entry to show the panel only on the scoped categories. Each entry picks where the "All spaces" link goes: the home page, latest, or categories.
 - **Events** — one entry per place the events panel appears. Scope an entry to categories, or leave categories empty for the fallback. Pick an events category, or leave it empty to show the events of the whole site.
