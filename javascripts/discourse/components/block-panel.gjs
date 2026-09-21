@@ -8,7 +8,7 @@ import BlockPanelSkeleton from "./block-panel-skeleton";
 // inside the data boundary, where a reserved-space skeleton replaces the
 // spinner. Sync panels omit @asyncData and yield their content directly.
 //
-// @title, @icon        header; <:header> replaces them with custom markup
+// @title, @icon        header, or <:header>
 // @mobile              instance stays visible in the single-column layout
 // @asyncData, @context passed to DAsyncContent; @skeleton shapes the placeholder
 // @onRetry             a failed load shows a message and a retry button

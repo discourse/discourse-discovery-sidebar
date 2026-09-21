@@ -1,5 +1,5 @@
 .block-space {
-  // the panel header: the space name row and its description, stacked
+  // Panel header
   &__intro {
     display: flex;
     flex: 1;
@@ -11,8 +11,6 @@
   &__head {
     @include block-panel-row;
 
-    // the space name is this panel's title: same size and weight as a header,
-    // and it wraps instead of truncating
     .block-space__name {
       font-size: var(--tc-discoverySidebar-panel-title-size);
       font-weight: 600;
