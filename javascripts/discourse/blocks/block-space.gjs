@@ -65,7 +65,7 @@ export default class BlockSpace extends Component {
   <template>
     {{#if this.space}}
       <BlockPanel @mobile={{@mobile}} class="block-space">
-        <:content>
+        <:header>
           <div
             class="block-space__intro
               {{if (this.isCurrent this.space) '--current'}}"
@@ -77,14 +77,6 @@ export default class BlockSpace extends Component {
             >
               <CategoryMark @category={{this.space}} />
               <span class="block-space__name">{{this.space.name}}</span>
-              {{#if @showTopicCounts}}
-                <span class="block-space__count">
-                  {{i18n
-                    (themePrefix "space.topic_count")
-                    count=this.space.totalTopicCount
-                  }}
-                </span>
-              {{/if}}
             </a>
             {{#if @showDescription}}
               {{#if this.space.description_text}}
@@ -94,7 +86,8 @@ export default class BlockSpace extends Component {
               {{/if}}
             {{/if}}
           </div>
-
+        </:header>
+        <:content>
           {{#if this.subcategories.length}}
             <ul class="block-space__list">
               {{#each this.subcategories as |subcategory|}}
