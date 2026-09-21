@@ -105,8 +105,7 @@ leaderboards:
 resources:
   type: objects
   default:
-    - name: "Default"
-      links:
+    - links:
         - label: "Community guidelines"
           url: "/guidelines"
           icon: "circle-check"
@@ -120,11 +119,8 @@ resources:
           icon: "circle-info"
   schema:
     name: resources
-    identifier: name
+    identifier: categories
     properties:
-      name:
-        type: string
-        required: true
       categories:
         type: categories
       links:

@@ -19,7 +19,7 @@ The component owns the `sidebar-discovery` block outlet. A theme that also calls
 - **Events** — one entry per place the events panel appears. Scope an entry to categories, or leave categories empty for the fallback. Pick an events category, or leave it empty to show the events of the whole site.
 - **Topic lists** — one entry per place the topics panel appears. Scope an entry to categories, or leave categories empty for the fallback. Pick the list, the period for top, and optionally a tag to narrow the list.
 - **Leaderboards** — one entry per leaderboard to show. Scope an entry to categories, or leave categories empty for the fallback. No ID means the plugin's default leaderboard. The panel disappears when the leaderboard is missing or inaccessible, so the setting is harmless without the Gamification plugin. Temporary failures show a retry button.
-- **Resources** — one entry per set of links, named for the settings list. Scope an entry to categories, or leave categories empty for the fallback.
+- **Resources** — one entry per set of links. Scope an entry to categories, or leave categories empty for the fallback.
 
 ## Styling
 
