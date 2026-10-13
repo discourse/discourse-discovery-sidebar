@@ -15,6 +15,7 @@
   // panel renders smaller than core's topic list meta data.
   --tc-DiscoverySidebar-BlockPanel-title-font-size: 1rem; // panel header and the space name
   --tc-DiscoverySidebar-BlockPanel-font-size: 0.875rem; // everything inside a panel body
+  --tc-DiscoverySidebar-BlockPanel-color-text-default: var(--primary);
   --tc-DiscoverySidebar-BlockPanel-color-text-muted: var(--primary-medium);
   --tc-DiscoverySidebar-BlockPanel-color-icon-muted: var(--primary-medium);
   --tc-DiscoverySidebar-BlockPanel-color-text-accent: var(--tertiary);

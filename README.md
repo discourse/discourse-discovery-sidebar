@@ -39,6 +39,7 @@ All sizes and colours come from tokens on `:root`, derived from core variables. 
   --tc-DiscoverySidebar-BlockPanel-space-padding: var(--space-4);
   --tc-DiscoverySidebar-BlockPanel-title-font-size: 1rem;
   --tc-DiscoverySidebar-BlockPanel-font-size: 0.875rem;
+  --tc-DiscoverySidebar-BlockPanel-color-text-default: var(--primary);
   --tc-DiscoverySidebar-BlockPanel-color-text-muted: var(--primary-medium);
   --tc-DiscoverySidebar-BlockPanel-color-icon-muted: var(--primary-medium);
   --tc-DiscoverySidebar-BlockPanel-color-text-accent: var(--tertiary);

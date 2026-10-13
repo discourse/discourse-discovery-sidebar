@@ -6,6 +6,7 @@
   border: var(--tc-DiscoverySidebar-BlockPanel-border-width) solid
     var(--tc-DiscoverySidebar-BlockPanel-color-border);
   border-radius: var(--tc-DiscoverySidebar-BlockPanel-border-radius);
+  color: var(--tc-DiscoverySidebar-BlockPanel-color-text-default);
   overflow: hidden;
 }
 
@@ -43,7 +44,7 @@
   &:visited,
   &:hover,
   &:focus-visible {
-    color: var(--primary);
+    color: var(--tc-DiscoverySidebar-BlockPanel-color-text-default);
   }
 }
 
