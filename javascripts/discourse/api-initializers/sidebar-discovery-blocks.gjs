@@ -20,7 +20,6 @@ export default apiInitializer((api) => {
     withoutEmptyContainers([
       {
         block: BlockGroup,
-        id: "topic-lists",
         conditions: {
           not: { type: "route", urls: ["/categories", "/categories/**"] },
         },
