@@ -2,6 +2,7 @@ import Component from "@glimmer/component";
 import { service } from "@ember/service";
 import { themePrefix } from "virtual:theme";
 import { block } from "discourse/blocks";
+import { number } from "discourse/lib/formatter";
 import getURL from "discourse/lib/get-url";
 import { i18n } from "discourse-i18n";
 import BlockPanel from "../components/block-panel";
@@ -109,6 +110,7 @@ export default class BlockSpace extends Component {
                         {{i18n
                           (themePrefix "space.topic_count")
                           count=subcategory.topic_count
+                          formatted_number=(number subcategory.topic_count)
                         }}
                       </span>
                     {{/if}}
@@ -145,6 +147,7 @@ export default class BlockSpace extends Component {
                       {{i18n
                         (themePrefix "space.topic_count")
                         count=category.totalTopicCount
+                        formatted_number=(number category.totalTopicCount)
                       }}
                     </span>
                   {{/if}}

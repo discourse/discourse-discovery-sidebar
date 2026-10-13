@@ -72,8 +72,8 @@ en:
     all_spaces: "Spaces"
     all_spaces_link: "All spaces"
     topic_count:
-      one: "%{count} topic"
-      other: "%{count} topics"
+      one: "%{formatted_number} topic"
+      other: "%{formatted_number} topics"
   panel:
     load_error: "Could not load this content. Please try again."
     retry: "Retry"
