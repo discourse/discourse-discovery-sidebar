@@ -5,8 +5,17 @@
 //
 // Everything only applies while a panel is actually rendered, so pages
 // without matching instances keep the stock full-width list.
+//
+// Breakpoints follow the space the page gets, not the viewport, so an open
+// sidebar counts. The layout renders straight into #main-outlet, the nearest
+// element that can be the container.
+#main-outlet:has(> .discovery-layout .block-panel) {
+  container-type: inline-size;
+  container-name: discovery-page;
+}
+
 .discovery-layout:has(.block-panel) {
-  @include viewport.from(lg) {
+  @include container.from(lg, discovery-page) {
     @if $sidebar_position == "below-navbar" {
       // Navbar stays full width; the content wrapper is the two-column grid.
       .discovery-layout__content {
@@ -14,7 +23,7 @@
         grid-template-columns:
           minmax(0, 1fr)
           var(--tc-DiscoverySidebar-size-inline);
-        grid-template-rows: repeat(4, auto) 1fr;
+        grid-template-rows: repeat(20, auto) 1fr;
         column-gap: var(--tc-DiscoverySidebar-space-gap-inline);
 
         > * {
@@ -30,8 +39,10 @@
         var(--tc-DiscoverySidebar-size-inline);
 
       // the trailing 1fr row absorbs leftover height when the sidebar is
-      // taller than the list, instead of opening gaps between the rows above
-      grid-template-rows: repeat(8, auto) 1fr;
+      // taller than the list, instead of opening gaps between the rows above.
+      // Every plugin outlet connector is a row of its own, so leave plenty:
+      // unused auto rows collapse to nothing.
+      grid-template-rows: repeat(20, auto) 1fr;
       column-gap: var(--tc-DiscoverySidebar-space-gap-inline);
 
       > * {
@@ -55,7 +66,7 @@
 
   // Single column: the sidebar moves above everything else and only panels
   // flagged for mobile stay visible.
-  @include viewport.until(lg) {
+  @include container.until(lg, discovery-page) {
     display: flex;
     flex-direction: column;
 
