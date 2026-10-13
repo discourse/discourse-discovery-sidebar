@@ -89,11 +89,15 @@ function pick(events, choose, compare, count) {
 export async function fetchEvents({ categoryId, count }) {
   const now = Date.now();
 
+  // The server stores an all-day event as midnight UTC of its date, so with
+  // "now" as the cutoff today's all-day events would already count as past.
+  // Two days back covers every timezone; the filter below decides what is
+  // still running.
   const upcoming = pick(
     await search({
       categoryId,
       count,
-      after: "now",
+      after: new Date(now - 2 * 24 * 60 * 60 * 1000).toISOString(),
       include_ongoing: true,
       order: "asc",
     }),

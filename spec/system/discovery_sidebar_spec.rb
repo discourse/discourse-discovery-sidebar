@@ -111,6 +111,23 @@ RSpec.describe "Discovery sidebar" do
       end
     end
 
+    it "lists an all-day event of today as upcoming" do
+      topic = Fabricate(:topic_with_op, title: "All-day community workshop")
+      Fabricate(
+        :event,
+        post: topic.first_post,
+        all_day: true,
+        original_starts_at: Time.now.utc.midnight,
+      )
+
+      visit("/latest")
+
+      within("#{sidebar} .block-events") do
+        expect(page).to have_css(".block-panel__title", text: "Upcoming events")
+        expect(page).to have_css(".block-events__name", text: "All-day community workshop")
+      end
+    end
+
     it "falls back to recent events when none are upcoming" do
       create_event("Community meetup last week", 5.days.ago)
 
