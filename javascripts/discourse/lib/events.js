@@ -1,73 +1,119 @@
 import { ajax } from "discourse/lib/ajax";
 import getURL from "discourse/lib/get-url";
+import I18n from "discourse-i18n";
+
+// The server orders by each event's stored date, which for a recurring event
+// can lie before its next occurrence, so fetch a margin and sort here.
+function requestLimit(count) {
+  return Math.min(Math.max(count * 5, 15), 100);
+}
+
+// All-day dates come as a bare "YYYY-MM-DD"; parsed as is they would be
+// midnight UTC, a day early west of UTC. Parse them as local days instead.
+function parse(value) {
+  if (!value) {
+    return null;
+  }
+  const allDay = /^\d{4}-\d{2}-\d{2}$/.test(value);
+  const date = new Date(allDay ? `${value}T00:00:00` : value);
+  return Number.isNaN(date.getTime()) ? null : { date, allDay };
+}
+
+// An all-day event lasts until the end of its last day, a timed one until
+// its end time, or its start time when it has none.
+function endOf(start, end) {
+  const last = end ?? start;
+  if (start.allDay) {
+    const date = new Date(last.date);
+    date.setHours(23, 59, 59, 999);
+    return date.getTime();
+  }
+  return last.date.getTime();
+}
 
 function occurrences(event) {
-  const upcoming = (event.upcoming_dates ?? []).map((date) => date.starts_at);
-  const starts = upcoming.length ? upcoming : [event.starts_at];
-  return starts
-    .filter(Boolean)
-    .map((iso) => ({ iso, ms: new Date(iso).getTime() }))
-    .filter((row) => !Number.isNaN(row.ms));
-}
-
-function nextOccurrence(event, now) {
-  return occurrences(event)
-    .filter((row) => row.ms >= now)
-    .sort((a, b) => a.ms - b.ms)[0];
-}
-
-function lastOccurrence(event, now) {
-  return occurrences(event)
-    .filter((row) => row.ms < now)
-    .sort((a, b) => b.ms - a.ms)[0];
+  const rows = event.occurrences?.length ? event.occurrences : [event];
+  return rows
+    .map((row) => {
+      const start = parse(row.starts_at);
+      return start
+        ? {
+            iso: row.starts_at,
+            start,
+            ms: start.date.getTime(),
+            endMs: endOf(start, parse(row.ends_at)),
+          }
+        : null;
+    })
+    .filter(Boolean);
 }
 
 function serialize([event, occurrence]) {
-  const date = new Date(occurrence.iso);
+  const { date } = occurrence.start;
   return {
     id: event.id,
     title: event.name?.trim() || event.post?.topic?.title || "",
     iso: occurrence.iso,
-    month: new Intl.DateTimeFormat(undefined, { month: "short" }).format(date),
+    month: date.toLocaleDateString(I18n.currentBcp47Locale, { month: "short" }),
     day: date.getDate(),
     url: event.post?.url ? getURL(event.post.url) : null,
   };
 }
 
-// Post events of the whole site, or of a category and its subcategories
-// when one is given. The next `count` upcoming events; when there are none,
-// the `count` most recent past events instead, flagged with `recent`. Null
-// when there are no events at all, so the panel hides itself.
-export async function fetchEvents({ categoryId, count }) {
+async function search({ categoryId, count, ...range }) {
   const result = await ajax("/discourse-post-event/events.json", {
     data: {
       category_id: categoryId,
       include_subcategories: true,
       include_details: true,
-      include_expired: true,
-      limit: Math.min(Math.max(count * 5, 15), 100),
+      limit: requestLimit(count),
+      ...range,
     },
   });
-  const events = result?.events ?? [];
-  const now = Date.now();
+  return result?.events ?? [];
+}
 
-  const upcoming = events
-    .map((event) => [event, nextOccurrence(event, now)])
+function pick(events, choose, compare, count) {
+  return events
+    .map((event) => [event, choose(occurrences(event))])
     .filter(([, occurrence]) => occurrence)
-    .sort(([, a], [, b]) => a.ms - b.ms)
+    .sort(([, a], [, b]) => compare(a, b))
     .slice(0, count)
     .map(serialize);
+}
+
+// Post events of the whole site, or of a category and its subcategories
+// when one is given. The next `count` events that are not over yet; when
+// there are none, the `count` most recent past events instead, flagged with
+// `recent`. Null when there are no events at all, so the panel hides itself.
+export async function fetchEvents({ categoryId, count }) {
+  const now = Date.now();
+
+  const upcoming = pick(
+    await search({
+      categoryId,
+      count,
+      after: "now",
+      include_ongoing: true,
+      order: "asc",
+    }),
+    (rows) =>
+      rows.filter((row) => row.endMs >= now).sort((a, b) => a.ms - b.ms)[0],
+    (a, b) => a.ms - b.ms,
+    count
+  );
 
   if (upcoming.length) {
     return { events: upcoming, recent: false };
   }
 
-  const recent = events
-    .map((event) => [event, lastOccurrence(event, now)])
-    .filter(([, occurrence]) => occurrence)
-    .sort(([, a], [, b]) => b.ms - a.ms)
-    .slice(0, count)
-    .map(serialize);
+  const recent = pick(
+    await search({ categoryId, count, before: "now", order: "desc" }),
+    (rows) =>
+      rows.filter((row) => row.endMs < now).sort((a, b) => b.ms - a.ms)[0],
+    (a, b) => b.ms - a.ms,
+    count
+  );
 
   return recent.length ? { events: recent, recent: true } : null;
 }
