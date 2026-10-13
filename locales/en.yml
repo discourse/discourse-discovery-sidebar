@@ -1,6 +1,6 @@
 en:
   theme_metadata:
-    description: "Configurable discovery sidebar: space, leaderboard and resource panels next to topic lists, driven by theme settings."
+    description: "Configurable discovery sidebar: space, events, topics, leaderboard and resource panels next to topic lists, driven by theme settings."
     settings:
       sidebar_position:
         description: "Where the discovery sidebar sits on wide screens."
