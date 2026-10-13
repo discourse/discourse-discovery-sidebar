@@ -1,21 +1,25 @@
 // Component tokens, all derived from core variables so colour schemes work
 // for free. A theme restyles every panel by redefining these on :root.
 :root {
-  --tc-discoverySidebar-width: 18rem;
-  --tc-discoverySidebar-gap: var(--space-6);
-  --tc-discoverySidebar-panel-gap: var(--space-4);
-  --tc-discoverySidebar-panel-bg: var(--secondary);
-  --tc-discoverySidebar-panel-border: 1px solid var(--primary-low);
-  --tc-discoverySidebar-panel-radius: var(--d-border-radius-large);
-  --tc-discoverySidebar-panel-padding: var(--space-4);
+  --tc-DiscoverySidebar-size-inline: 18rem;
+  --tc-DiscoverySidebar-space-gap-inline: var(--space-6);
+  --tc-DiscoverySidebar-space-gap-block: var(--space-4);
+  --tc-DiscoverySidebar-BlockPanel-color-background: var(--secondary);
+  --tc-DiscoverySidebar-BlockPanel-border-width: 1px;
+  --tc-DiscoverySidebar-BlockPanel-color-border: var(--primary-low);
+  --tc-DiscoverySidebar-BlockPanel-border-radius: var(--d-border-radius-large);
+  --tc-DiscoverySidebar-BlockPanel-space-padding: var(--space-4);
 
   // Type sizes in rem: core's --font-* scale is em-based and compounds when
-  // nested, so panels never use it. Meta size is the floor: nothing in a
+  // nested, so panels never use it. The body size is the floor: nothing in a
   // panel renders smaller than core's topic list meta data.
-  --tc-discoverySidebar-panel-title-size: 1rem; // panel header and the space name
-  --tc-discoverySidebar-panel-meta-size: 0.875rem; // everything inside a panel body
-  --tc-discoverySidebar-panel-muted: var(--primary-medium);
-  --tc-discoverySidebar-panel-accent: var(--tertiary);
-  --tc-discoverySidebar-row-hover-bg: var(--primary-very-low);
-  --tc-discoverySidebar-mark-size: 1.25rem;
+  --tc-DiscoverySidebar-BlockPanel-title-font-size: 1rem; // panel header and the space name
+  --tc-DiscoverySidebar-BlockPanel-font-size: 0.875rem; // everything inside a panel body
+  --tc-DiscoverySidebar-BlockPanel-color-text-muted: var(--primary-medium);
+  --tc-DiscoverySidebar-BlockPanel-color-icon-muted: var(--primary-medium);
+  --tc-DiscoverySidebar-BlockPanel-color-text-accent: var(--tertiary);
+  --tc-DiscoverySidebar-BlockPanel-row-color-background-hovered: var(
+    --primary-very-low
+  );
+  --tc-DiscoverySidebar-CategoryMark-size-icon: 1.25rem;
 }

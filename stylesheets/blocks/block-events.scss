@@ -23,14 +23,15 @@
     width: 2.75rem;
     min-height: 2.75rem;
     padding: var(--space-1);
-    border: var(--tc-discoverySidebar-panel-border);
+    border: var(--tc-DiscoverySidebar-BlockPanel-border-width) solid
+      var(--tc-DiscoverySidebar-BlockPanel-color-border);
     border-radius: var(--d-border-radius);
     line-height: 1.1;
     text-align: center;
   }
 
   &__month {
-    color: var(--tc-discoverySidebar-panel-accent);
+    color: var(--tc-DiscoverySidebar-BlockPanel-color-text-accent);
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }

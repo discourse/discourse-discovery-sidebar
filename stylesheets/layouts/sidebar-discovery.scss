@@ -13,9 +13,9 @@
         display: grid;
         grid-template-columns:
           minmax(0, 1fr)
-          var(--tc-discoverySidebar-width);
+          var(--tc-DiscoverySidebar-size-inline);
         grid-template-rows: repeat(4, auto) 1fr;
-        column-gap: var(--tc-discoverySidebar-gap);
+        column-gap: var(--tc-DiscoverySidebar-space-gap-inline);
 
         > * {
           grid-column: 1;
@@ -27,12 +27,12 @@
       display: grid;
       grid-template-columns:
         minmax(0, 1fr)
-        var(--tc-discoverySidebar-width);
+        var(--tc-DiscoverySidebar-size-inline);
 
       // the trailing 1fr row absorbs leftover height when the sidebar is
       // taller than the list, instead of opening gaps between the rows above
       grid-template-rows: repeat(8, auto) 1fr;
-      column-gap: var(--tc-discoverySidebar-gap);
+      column-gap: var(--tc-DiscoverySidebar-space-gap-inline);
 
       > * {
         grid-column: 1;
@@ -87,7 +87,7 @@
   &__block {
     display: flex;
     flex-direction: column;
-    gap: var(--tc-discoverySidebar-panel-gap);
+    gap: var(--tc-DiscoverySidebar-space-gap-block);
   }
 
   // core keeps a wrapper per block, and a container wrapper per head or

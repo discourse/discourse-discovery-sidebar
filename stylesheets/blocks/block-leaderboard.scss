@@ -15,7 +15,7 @@
 
   &__rank {
     width: 1.5em;
-    color: var(--tc-discoverySidebar-panel-muted);
+    color: var(--tc-DiscoverySidebar-BlockPanel-color-text-muted);
     font-variant-numeric: tabular-nums;
     text-align: end;
   }
@@ -42,7 +42,7 @@
 
   &__empty {
     margin: 0;
-    color: var(--tc-discoverySidebar-panel-muted);
-    font-size: var(--tc-discoverySidebar-panel-meta-size);
+    color: var(--tc-DiscoverySidebar-BlockPanel-color-text-muted);
+    font-size: var(--tc-DiscoverySidebar-BlockPanel-font-size);
   }
 }

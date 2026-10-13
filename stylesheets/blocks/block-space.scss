@@ -12,7 +12,7 @@
     @include block-panel-row;
 
     .block-space__name {
-      font-size: var(--tc-discoverySidebar-panel-title-size);
+      font-size: var(--tc-DiscoverySidebar-BlockPanel-title-font-size);
       font-weight: 600;
       white-space: normal;
       overflow: visible;
@@ -23,8 +23,8 @@
   // same style as a resource description
   &__description {
     margin: 0;
-    color: var(--tc-discoverySidebar-panel-muted);
-    font-size: var(--tc-discoverySidebar-panel-meta-size);
+    color: var(--tc-DiscoverySidebar-BlockPanel-color-text-muted);
+    font-size: var(--tc-DiscoverySidebar-BlockPanel-font-size);
     line-height: var(--line-height-medium);
   }
 
@@ -50,7 +50,7 @@
   }
 
   &__count {
-    color: var(--tc-discoverySidebar-panel-muted);
+    color: var(--tc-DiscoverySidebar-BlockPanel-color-text-muted);
     white-space: nowrap;
   }
 
@@ -58,14 +58,14 @@
   &__link:focus-visible .block-space__name,
   &__head:hover .block-space__name,
   &__head:focus-visible .block-space__name {
-    color: var(--tc-discoverySidebar-panel-accent);
+    color: var(--tc-DiscoverySidebar-BlockPanel-color-text-accent);
   }
 
   .--current &__link {
     font-weight: 700;
 
     .block-space__name {
-      color: var(--tc-discoverySidebar-panel-accent);
+      color: var(--tc-DiscoverySidebar-BlockPanel-color-text-accent);
     }
   }
 
@@ -73,7 +73,7 @@
   // firms up with it
   &__intro.--current {
     .block-space__name {
-      color: var(--tc-discoverySidebar-panel-accent);
+      color: var(--tc-DiscoverySidebar-BlockPanel-color-text-accent);
     }
 
     .block-space__description {

@@ -7,12 +7,12 @@
 
   &__icon {
     display: inline-flex;
-    color: var(--tc-discoverySidebar-panel-muted);
+    color: var(--tc-DiscoverySidebar-BlockPanel-color-icon-muted);
   }
 
   &__title {
     margin: 0;
-    font-size: var(--tc-discoverySidebar-panel-title-size);
+    font-size: var(--tc-DiscoverySidebar-BlockPanel-title-font-size);
     font-weight: 600;
     line-height: var(--line-height-medium);
   }
@@ -34,8 +34,8 @@
   }
 
   &__link {
-    color: var(--tc-discoverySidebar-panel-accent);
-    font-size: var(--tc-discoverySidebar-panel-meta-size);
+    color: var(--tc-DiscoverySidebar-BlockPanel-color-text-accent);
+    font-size: var(--tc-DiscoverySidebar-BlockPanel-font-size);
     font-weight: 600;
   }
 }
