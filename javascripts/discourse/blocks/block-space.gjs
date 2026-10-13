@@ -76,13 +76,13 @@ export default class BlockSpace extends Component {
               aria-current={{if (this.isCurrent this.space) "page"}}
             >
               <CategoryMark @category={{this.space}} />
-              <span class="block-space__name">{{this.space.name}}</span>
+              <span class="block-space__name">{{this.space.displayName}}</span>
             </a>
             {{#if @showDescription}}
-              {{#if this.space.description_text}}
+              {{#if this.space.descriptionText}}
                 <p
                   class="block-space__description"
-                >{{this.space.description_text}}</p>
+                >{{this.space.descriptionText}}</p>
               {{/if}}
             {{/if}}
           </div>
@@ -101,7 +101,9 @@ export default class BlockSpace extends Component {
                     aria-current={{if (this.isCurrent subcategory) "page"}}
                   >
                     <CategoryMark @category={{subcategory}} />
-                    <span class="block-space__name">{{subcategory.name}}</span>
+                    <span
+                      class="block-space__name"
+                    >{{subcategory.displayName}}</span>
                     {{#if @showTopicCounts}}
                       <span class="block-space__count">
                         {{i18n
@@ -135,7 +137,9 @@ export default class BlockSpace extends Component {
               <li class="block-space__item">
                 <a class="block-space__link" href={{category.url}}>
                   <CategoryMark @category={{category}} />
-                  <span class="block-space__name">{{category.name}}</span>
+                  <span
+                    class="block-space__name"
+                  >{{category.displayName}}</span>
                   {{#if @showTopicCounts}}
                     <span class="block-space__count">
                       {{i18n
