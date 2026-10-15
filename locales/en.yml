@@ -31,12 +31,9 @@ en:
           properties:
             categories:
               label: "Categories"
-            list:
-              label: "List"
-              description: "Topics of the current space, or of the whole site on global lists."
-            period:
-              label: "Period"
-              description: "Only applies to the top list."
+            order:
+              label: "Order"
+              description: "Topics of the current top-level category, or of the whole site on global lists. Hot and activity use the hot and latest lists; the others sort the latest list."
             tag:
               label: "Tag"
               description: "Only topics with this tag."

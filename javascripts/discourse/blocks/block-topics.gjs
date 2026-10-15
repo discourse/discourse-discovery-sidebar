@@ -14,8 +14,9 @@ import BlockPanel from "../components/block-panel";
 import { spaceOf } from "../lib/space";
 
 // The layout selects the topic list entry for the current category and
-// passes its list, period and tag here. Topics come from the current space
-// and its subcategories, or from the whole site on global lists. Pinned
+// passes its order and tag here. Topics come from the current top-level
+// category and its subcategories, or from the whole site on global lists, so
+// "View all" stays on the same list. Pinned
 // topics are left out: they already sit on top of the main list.
 @block("theme:discovery-sidebar:topics", {
   description: "A compact topic list of the current space",
@@ -23,11 +24,10 @@ import { spaceOf } from "../lib/space";
     title: { type: "string", required: true },
     icon: { type: "string" },
     mobile: { type: "boolean", default: false },
-    list: { type: "string", default: "hot", enum: ["latest", "hot", "top"] },
-    period: {
+    order: {
       type: "string",
-      default: "monthly",
-      enum: ["all", "yearly", "quarterly", "monthly", "weekly", "daily"],
+      default: "hot",
+      enum: ["hot", "activity", "created", "likes", "views", "posts"],
     },
     tag: { type: "string" },
     count: { type: "number", default: 5 },
@@ -50,8 +50,9 @@ export default class BlockTopics extends Component {
   }
 
   get filter() {
-    const { list, tag } = this.args;
+    const { order, tag } = this.args;
     const space = this.space;
+    const list = order === "hot" ? "hot" : "latest";
     const categoryPath = space
       ? `c/${Category.slugFor(space)}/${space.id}`
       : null;
@@ -69,13 +70,15 @@ export default class BlockTopics extends Component {
     return list;
   }
 
+  // hot and activity are the native orders of the hot and latest lists.
   get params() {
-    return this.args.list === "top" ? { period: this.args.period } : undefined;
+    const { order } = this.args;
+    return ["hot", "activity"].includes(order) ? undefined : { order };
   }
 
   get viewAllUrl() {
     const url = getURL(`/${this.filter}`);
-    return this.params ? `${url}?period=${this.params.period}` : url;
+    return this.params ? `${url}?order=${this.params.order}` : url;
   }
 
   get skeleton() {

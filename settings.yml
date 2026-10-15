@@ -48,35 +48,28 @@ events:
 
 # Which topics the topics block lists for a space. An entry scoped to
 # categories applies on those categories and their subcategories; the unscoped
-# entry everywhere else. The period only applies to the top list; a tag
-# narrows the list to topics carrying it.
+# entry everywhere else. The order sorts the list; a tag narrows it to topics
+# carrying it.
 topic_lists:
   type: objects
   default:
-    - list: hot
+    - order: hot
   schema:
     name: topic_list
     identifier: categories
     properties:
       categories:
         type: categories
-      list:
+      order:
         type: enum
         default: hot
         choices:
-          - latest
           - hot
-          - top
-      period:
-        type: enum
-        default: monthly
-        choices:
-          - all
-          - yearly
-          - quarterly
-          - monthly
-          - weekly
-          - daily
+          - activity
+          - created
+          - likes
+          - views
+          - posts
       tag:
         type: tags
         validations:

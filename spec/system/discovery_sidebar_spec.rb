@@ -193,7 +193,11 @@ RSpec.describe "Discovery sidebar" do
       Fabricate(:topic_with_op, title: "A pinned topic with the rules", pinned_at: 1.hour.ago)
     end
 
-    before { update_setting(:topic_lists, [{ "list" => "latest" }]) }
+    fab!(:category_topic) do
+      Fabricate(:topic_with_op, title: "A topic inside the product category", category: subcategory)
+    end
+
+    before { update_setting(:topic_lists, [{ "order" => "activity" }]) }
 
     it "leaves out pinned topics" do
       visit("/latest")
@@ -206,7 +210,7 @@ RSpec.describe "Discovery sidebar" do
     end
 
     it "narrows the list to the configured tag" do
-      update_setting(:topic_lists, [{ "list" => "latest", "tag" => [tag.name] }])
+      update_setting(:topic_lists, [{ "order" => "activity", "tag" => [tag.name] }])
 
       visit("/latest")
 
@@ -214,6 +218,37 @@ RSpec.describe "Discovery sidebar" do
         expect(page).to have_css(".block-topics__title", text: tagged_topic.title)
         expect(page).to have_no_css(".block-topics__title", text: untagged_topic.title)
       end
+    end
+
+    it "narrows the list to the current top-level category" do
+      visit("/c/#{parent_category.slug}/#{parent_category.id}")
+
+      within("#{sidebar} .block-topics") do
+        expect(page).to have_css(".block-topics__title", text: category_topic.title)
+        expect(page).to have_no_css(".block-topics__title", text: untagged_topic.title)
+      end
+    end
+
+    it "sorts the list by the configured order" do
+      untagged_topic.update!(like_count: 10)
+      update_setting(:topic_lists, [{ "order" => "likes" }])
+
+      visit("/latest")
+
+      expect(page).to have_css(
+        "#{sidebar} .block-topics__row:first-child .block-topics__title",
+        text: untagged_topic.title,
+      )
+    end
+
+    it "links to the same list of the current top-level category" do
+      update_setting(:topic_lists, [{ "order" => "likes" }])
+
+      visit("/c/#{subcategory.slug}/#{subcategory.id}")
+
+      expect(page).to have_css(
+        "#{sidebar} .block-topics .block-panel__link[href='/c/#{parent_category.slug}/#{parent_category.id}/l/latest?order=likes']",
+      )
     end
   end
 end
