@@ -33,7 +33,7 @@ export default apiInitializer((api) => {
                 args: {
                   title: "space.all_spaces",
                   icon: "compass",
-                  mobile: true,
+                  mobile: false,
                   showDescription: true,
                   showTopicCounts: true,
                   allSpacesUrl: entry.all_spaces_url,
@@ -45,7 +45,7 @@ export default apiInitializer((api) => {
                 args: {
                   title: "space.all_spaces",
                   icon: "compass",
-                  mobile: true,
+                  mobile: false,
                   showDescription: true,
                   showTopicCounts: true,
                   allSpacesUrl: entry.all_spaces_url,
