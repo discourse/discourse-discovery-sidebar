@@ -110,6 +110,7 @@ resources:
         - label: "About this site"
           url: "/about"
           icon: "circle-info"
+          description: "Key stats and how to get in touch"
   schema:
     name: resources
     identifier: categories
